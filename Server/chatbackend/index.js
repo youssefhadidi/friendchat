@@ -14,10 +14,15 @@ function receive(message){
 }
 
 io.on('connection', (socket) => {
+
   console.log('a user connected');
+
+  socket.on('returnmessage',(value)=>{
+    console.log(value);
+  })
 });
 
-io.on('receive',value, receive)
+// io.on('receive',value, receive)
 
 
 server.listen(4000, () => {

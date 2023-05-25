@@ -8,19 +8,24 @@ const URL = 'http://localhost:4000';
 
 
 
-const socket = io(URL);
 
 
 
 function App() {
-console.log("love Nghi")
-  const [history, setHistory] = useState([{sender:'Nghi',text:'dghaiduadz'},{sender:'Youssef',text:'dajozidojiazd'}] )
+  const socket = io(URL);
+  const [history, setHistory] = useState([{sender:'toi',text:'dghaiduadz'},{sender:'moi',text:'dajozidojiazd'}] )
   const [currentMessage, setCurrentMessage] = useState('')
   const sendMessage = (text) => {
-    setHistory([...history,{sender:'Youssef',text:text}])
-    socket.timeout(5000).emit('receive',)
+    // setHistory([...history,{sender:'Youssef',text:text}])
+    // socket.timeout(5000).emit('receive',)
+    socket.emit('returnmessage',text,(value)=>{
+      console.log(value);
+    })
   }
-
+  
+  socket.on('message',(value)=>{
+    console.log(value);
+  })
 
 
 
