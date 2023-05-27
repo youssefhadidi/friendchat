@@ -1,13 +1,25 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server,{cors:{ origin: '*'}});
+const io = new Server(server, { cors: { origin: '*' } });
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+app.use(express.json());
+app.use(cors());
+
+const users = [];
+
+app.post('/api/users', (req, res) => {
+  const user = req.body;
+  users.push(user);
+  res.send(user);
 });
+
+app.get('/api/users', (req, res) => {
+  res.send(users);
+})
 
 function receive(message){
     console.log('test', message)
