@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
 });
 
 function receive(message){
-    console.log(message)
+    console.log('test', message)
 }
 
 io.on('connection', (socket) => {
