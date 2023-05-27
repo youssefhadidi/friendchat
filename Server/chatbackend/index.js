@@ -24,7 +24,7 @@ io.on('connection', (socket) => {
 
 // io.on('receive',value, receive)
 
-
-server.listen(4000, () => {
-  console.log('listening on *:4000');
+const port = process.env.PORT || 4000;
+server.listen(port, () => {
+  console.log(`Listening on port ${port}...`);
 });

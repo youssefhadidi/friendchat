@@ -1,18 +1,12 @@
 import { useState } from 'react';
 import './App.css';
-import './socket.js'
-import History from './components/history/History';
-import { io } from 'socket.io-client';
-
-const URL = 'http://localhost:4000';
-
-
-
-
-
+import History from './components/messages/Messages';
+import socket from "./services/socket";
+import Login from './components/login/login';
 
 function App() {
-  const socket = io(URL);
+  //const socket = io(URL);
+  const [user, setUser] = useState(null);
   const [history, setHistory] = useState([{sender:'toi',text:'dghaiduadz'},{sender:'moi',text:'dajozidojiazd'}] )
   const [currentMessage, setCurrentMessage] = useState('')
   const sendMessage = (text) => {
@@ -27,7 +21,7 @@ function App() {
     console.log(value);
   })
 
-
+  if (!user) return <Login onLogin={user => setUser(user) } />
 
   return (
     <div className="App">
