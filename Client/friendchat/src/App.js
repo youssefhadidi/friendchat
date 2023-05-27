@@ -13,10 +13,10 @@ function App() {
   const [history, setHistory] = useState([{sender:'toi',text:'dghaiduadz'},{sender:'moi',text:'dajozidojiazd'}] )
   const [currentMessage, setCurrentMessage] = useState('');
 
-  const handleLogin = async user => {
+  const handleLogin = user => {
     try {
       setUser(user);
-      const { data } = await register(user);
+      register(user);
     } catch (error) {
       console.log(error);
     }

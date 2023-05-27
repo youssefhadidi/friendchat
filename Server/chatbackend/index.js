@@ -11,28 +11,38 @@ app.use(cors());
 
 const users = [];
 
-app.post('/api/users', (req, res) => {
+/*app.post('/api/users', (req, res) => {
   const user = req.body;
   users.push(user);
   res.send(user);
-});
+});*/
 
 app.get('/api/users', (req, res) => {
   res.send(users);
 })
 
-function receive(message){
+/*function receive(message){
     console.log('test', message)
-}
+}*/
 
-io.on('connection', (socket) => {
+io.on('connection', socket => {
 
-  console.log('a user connected');
+  socket.on("user login", user => {
+    users.push(user);
+    socket.username = user.username;
+  })
 
-  socket.on('returnmessage',(value)=>{
+  /*socket.on('returnmessage',(value)=>{
     console.log(value);
+  })*/
+
+  socket.on('disconnect', () => {
+    const index = users.findIndex(u => u.username === socket.username);
+    users.splice(index, 1);
+    console.log("user disconnect")
   })
 });
+
 
 // io.on('receive',value, receive)
 

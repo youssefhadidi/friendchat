@@ -7,7 +7,7 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
 
   const handleSubmit = () => {
-    onLogin(username);
+    onLogin({username});
   }
 
     return (
