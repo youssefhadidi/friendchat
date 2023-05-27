@@ -1,3 +1,8 @@
 .homePage {
   display: flex;
 }
+
+.chat-box {
+  height: 100vh;
+}
+

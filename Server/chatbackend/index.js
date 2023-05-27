@@ -30,15 +30,18 @@ io.on('connection', socket => {
   socket.on("user login", user => {
     users.push(user);
     socket.username = user.username;
+    io.emit("all users", users);
   })
 
-  /*socket.on('returnmessage',(value)=>{
-    console.log(value);
-  })*/
+  socket.on("chat message", msg =>{
+    console.log(msg);
+    io.emit("chat message", msg);
+  })
 
   socket.on('disconnect', () => {
     const index = users.findIndex(u => u.username === socket.username);
     users.splice(index, 1);
+    io.emit("all users", users);
     console.log("user disconnect")
   })
 });
