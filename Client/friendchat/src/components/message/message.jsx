@@ -1,7 +1,8 @@
-import React from 'react';
-import ListGroup from 'react-bootstrap/esm/ListGroup';
+import "./message.css";
+import React from "react";
+import ListGroup from "react-bootstrap/esm/ListGroup";
 
-function Message({sender, text}) {
+function Message({ sender, text }) {
   return (
     <ListGroup.Item
       as="li"
@@ -15,4 +16,4 @@ function Message({sender, text}) {
   );
 }
 
-export default Message
+export default Message;
