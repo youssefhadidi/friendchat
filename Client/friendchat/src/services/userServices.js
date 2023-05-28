@@ -1,11 +1,14 @@
 import socket from './socket';
 import http from "./httpServices";
 
-const endpoint = "http://localhost:5000/api/users";
+const apiEndpoint = "http://localhost:4000/api/users";
 
 export const register = user => {
-    //return http.post(endpoint, {username: user});
-    socket.emit("user login", user);  
+    return http.post(apiEndpoint, user);
+}
+
+export const connectUser = user => {
+    socket.emit("user login", user);
 }
 
 export const getAllUsers = callBack => {

@@ -4,45 +4,22 @@ const cors = require('cors');
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const {userRouter, registerUserHandlers} = require("./handlers/userHandler");
+
 const io = new Server(server, { cors: { origin: '*' } });
 
 app.use(express.json());
 app.use(cors());
 
-const users = [];
-
-/*app.post('/api/users', (req, res) => {
-  const user = req.body;
-  users.push(user);
-  res.send(user);
-});*/
-
-app.get('/api/users', (req, res) => {
-  res.send(users);
-})
-
-/*function receive(message){
-    console.log('test', message)
-}*/
+app.use('/api/users', userRouter)
 
 io.on('connection', socket => {
-
-  socket.on("user login", user => {
-    users.push(user);
-    socket.username = user.username;
-    io.emit("all users", users);
-  })
-
+  console.log("a user connect")
   socket.on("chat message", msg =>{
     io.emit("chat message", msg);
   })
 
-  socket.on('disconnect', () => {
-    const index = users.findIndex(u => u.username === socket.username);
-    users.splice(index, 1);
-    io.emit("all users", users);
-    console.log("user disconnect")
-  })
+  registerUserHandlers(io, socket);
 });
 
 
