@@ -13,8 +13,10 @@ function App() {
   const [user, setUser] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const [messages, setMessages] = useState([]);
-  //const [currentMessage, setCurrentMessage] = useState("");
+  const [currentMessage, setCurrentMessage] = useState("");
 
+
+  console.log("hello");
   const handleLogin = user => {
     try {
       setUser(user);
@@ -26,15 +28,22 @@ function App() {
 
   const handleSendMessage = msg => {
     sendMessage({ sender: user.username, text: msg });
-    getMessage(msg => {
-      const allMessages = [...messages, msg];
-      setMessages(allMessages);
-    })
   }
 
   useEffect(() => {
     getAllUsers(setAllUsers);
   }, [allUsers]);
+
+  useEffect(() => {
+    getMessage(setCurrentMessage);
+  }, [messages]);
+
+  useEffect(() => {
+    if (currentMessage) {
+      const allMessages = [...messages, currentMessage];
+      setMessages(allMessages);
+    }
+  }, [currentMessage]);
 
   if (!user) return <Login onLogin={handleLogin} />
 
