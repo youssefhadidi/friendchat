@@ -8,7 +8,6 @@ const Input = ({ onSubmit }) => {
     const [value, setValue] = useState("");
     
     const handleSubmit = () => {
-        console.log(value)
         onSubmit(value);
         setValue('');
     }

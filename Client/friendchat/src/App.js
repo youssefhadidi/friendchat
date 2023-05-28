@@ -37,8 +37,10 @@ function App() {
   }, [messages]);
 
   useEffect(() => {
-    const allMessages = [...messages, currentMessage];
-    setMessages(allMessages);
+    if (currentMessage) {
+      const allMessages = [...messages, currentMessage];
+      setMessages(allMessages);
+    }
   }, [currentMessage]);
 
   if (!user) return <Login onLogin={handleLogin} />
