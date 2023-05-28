@@ -15,6 +15,8 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
 
+
+  console.log("hello");
   const handleLogin = user => {
     try {
       setUser(user);
