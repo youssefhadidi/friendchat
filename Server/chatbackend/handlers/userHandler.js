@@ -1,27 +1,27 @@
 const express = require("express");
+const User = require("./User");
 const router = express.Router();
-const Joi = require("joi");
 
-const users = [];
+// changed array to object for faster lookup operation
+const users = {};
 
 router.post('/', (req, res) => {
     const error = validateUsername(req.body);
     if (error) return res.status(400).send(error);
 
-    const user = { id: users.length + 1, username: req.body.username };
-    users.push(user);
+    const user = new User(req.body.username)//{ id: count++, username: req.body.username };
+    users[req.body.username.toLowerCase()] = user;
     res.send(user);
 })
 
 const validateUsername = username => {
-    const schema = Joi.object({
-        username: Joi.string().required().label("Username")
-    });
-    
-    const {error} = schema.validate(username);
-    if (error) return error.details[0].message;
+    const regexPattern = /^[A-Za-z0-9]/;
 
-    if (users.find(u => u.username.toLowerCase() === username.username.toLowerCase()))
+    const valid = regexPattern.test(username.username);
+    if (!valid) return "Invalid Username";
+
+
+    if (users[username.username.toLowerCase()])
         return "Username already exists";
     
     return null;
@@ -29,15 +29,16 @@ const validateUsername = username => {
 
 const registerUserHandlers = (io, socket) => {
     socket.on("user login", (user) => { 
-        socket.username = user.username;
+        socket.username = user.username.toLowerCase();
         socket.id = user.id;
-      io.emit("all users", users);
+        const usersData = Object.values(users);
+      io.emit("all users", usersData);
     });
 
     socket.on("disconnect", () => {
-      const index = users.findIndex((u) => u.username === socket.username);
-      users.splice(index, 1);
-      io.emit("all users", users);
+      delete users[socket.username];
+      const usersData = Object.values(users);
+      io.emit("all users", usersData);
       console.log("user disconnect");
     });
 }

@@ -22,6 +22,8 @@ const Login = ({onLogin}) => {
     onLogin(user);
   }
 
+  
+
   useEffect(() => {
     if (username === "")
       setError("");
@@ -31,7 +33,7 @@ const Login = ({onLogin}) => {
       <Form className="login" onSubmit={e => handleSubmit(e)}>
         <Form.Group className="mb-3" controlId="login">
           <Form.Label>Login as</Form.Label>
-          <Form.Control type="text" placeholder="Username" value={username} onChange={ e => setUsername(e.target.value)} />
+          <Form.Control className="shadow-none" type="text" placeholder="Username" value={username} onChange={ e => setUsername(e.target.value)} />
         </Form.Group>
         {error && <Alert variant="secondary error-message">{error}</Alert>}
         <Button variant="primary" type="submit" disabled={!username || error}>
