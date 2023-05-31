@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import './login.css'
 import { useState, useEffect } from "react";
-import { register } from "../../services/userServices";
+import { register, validateUsername } from "../../services/userServices";
 
 const Login = ({onLogin}) => {
   const [username, setUsername] = useState("");
@@ -11,6 +11,13 @@ const Login = ({onLogin}) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    // Client-side validation
+    const error = validateUsername(username);
+    if (error) {
+      setError(error)
+      return;
+    }
+
     let user;
     try {
       const { data } = await register({ username });
@@ -42,7 +49,7 @@ const Login = ({onLogin}) => {
       <Form className="login" onSubmit={e => handleSubmit(e)}>
         <Form.Group className="mb-3" controlId="login">
           <Form.Label>Login as</Form.Label>
-          <Form.Control className="shadow-none" type="text" placeholder="Username" value={username} onChange={e => handleChange(e)} />
+          <Form.Control className="shadow-none" type="text" placeholder="Username" value={username} onChange={e => handleChange(e)} required/>
         </Form.Group>
         {error && <Alert variant="secondary error-message">{error}</Alert>}
         <Button variant="primary" type="submit" disabled={!username || error}>

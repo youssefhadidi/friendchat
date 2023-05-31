@@ -15,29 +15,30 @@ const Profile = ({ user, onChangeStatus }) => {
             size="lg"
           >
             <i
-              className={"fa fa-circle status " + statuses[currentStatus]}
+              className={"fa fa-circle status " + currentStatus}
               aria-hidden="true"
             ></i>
             {currentStatus}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-                    {Object.keys(statuses).map((status) => {
-                return status === currentStatus ? (
-                  null
-                ) : (
-                  <Dropdown.Item
-                    value={status}
-                    onClick={() => onChangeStatus(status)}
-                  >
-                    <i
-                      className={"fa fa-circle status " + statuses[status]}
-                      aria-hidden="true"
-                    ></i>
-                    {status}
-                  </Dropdown.Item>
-                ); 
-            })}
+                {Object.keys(statuses).map((status) => {
+                  return status === currentStatus ? 
+                                                  null
+                                                  : (
+                                                  <Dropdown.Item
+                                                    value={status}
+                                                    key={status}
+                                                    onClick={() => onChangeStatus(status)}
+                                                  >
+                                                    <i
+                                                      className={"fa fa-circle status " + statuses[status]}
+                                                      aria-hidden="true"
+                                                    ></i>
+                                                    {status}
+                                                  </Dropdown.Item>
+                                                  ); 
+                })}
           </Dropdown.Menu>
         </Dropdown>
       </>

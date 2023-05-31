@@ -4,7 +4,7 @@ const cors = require('cors');
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const {userRouter, registerUserHandlers} = require("./handlers/userHandler");
+const {userRouter, registerUserHandlers, updateUserData} = require("./handlers/userHandler");
 
 const io = new Server(server, { cors: { origin: '*' } });
 
@@ -20,6 +20,7 @@ io.on('connection', socket => {
   })
 
   registerUserHandlers(io, socket);
+  updateUserData(io, socket);
 });
 
 const port = process.env.PORT || 4000;

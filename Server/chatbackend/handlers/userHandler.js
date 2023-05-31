@@ -6,7 +6,7 @@ const router = express.Router();
 const users = {};
 
 router.post('/', (req, res) => {
-    const error = validateUsername(req.body);
+    const error = validateUser(req.body);
     if (error) return res.status(400).send(error);
 
     const user = new User(req.body.username);
@@ -14,7 +14,7 @@ router.post('/', (req, res) => {
     res.send(user);
 })
 
-const validateUsername = user => {
+const validateUser = user => {
     const regexPattern = /^[A-Za-z0-9]/;
 
     const valid = regexPattern.test(user.username);
@@ -37,10 +37,20 @@ const registerUserHandlers = (io, socket) => {
 
     socket.on("disconnect", () => {
       delete users[socket.username];
-      const usersData = Object.values(users);
+        const usersData = Object.values(users);
+        console.log(usersData);
       io.emit("all_users", usersData);
       console.log("user disconnect");
     });
 }
 
-module.exports = {userRouter: router, registerUserHandlers};
+const updateUserData = (io, socket) => {
+  socket.on("update_status", status => {
+    const user = users[socket.username];
+    user.status = status;
+    const usersData = Object.values(users);
+    io.emit("all_users", usersData);
+  })
+}
+
+module.exports = {userRouter: router, registerUserHandlers, updateUserData};

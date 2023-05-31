@@ -4,7 +4,11 @@ import Col from "react-bootstrap/Col";
 import ChatBox from "./components/chatbox/ChatBox";
 import Login from "./routes/login/Login";
 import Users from "./components/users/Users";
-import { getAllUsers, connectUser } from "./services/userServices";
+import {
+  getAllUsers,
+  connectUser,
+  updateUserStatus,
+} from "./services/userServices";
 import { getMessage, sendMessage } from "./services/messageService";
 import Input from "./components/input/input";
 import Profile from "./components/profile/Profile";
@@ -25,8 +29,9 @@ function App() {
   };
 
   const handleChangeStatus = status => {
-    console.log(status)
     setUser({ ...user, status: status });
+    updateUserStatus(status);
+
   }
 
   useEffect(() => {
