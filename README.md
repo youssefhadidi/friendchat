@@ -1,4 +1,4 @@
-# friendchat
+# friendchat (In progress)
 Real-time Chat App.
 Technologies in use:
 - Frontend : React, Bootstrap
