@@ -8,11 +8,11 @@ export const register = user => {
 }
 
 export const connectUser = user => {
-    socket.emit("user login", user);
+    socket.emit("user_login", user);
 }
 
 export const getAllUsers = callBack => {
-    socket.on("all users", users => {
+    socket.on("all_users", users => {
         callBack(users);
     } )
 }

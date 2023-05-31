@@ -1,11 +1,11 @@
 import socket from './socket';
 
 export const sendMessage = msg => {
-    socket.emit("chat message", msg);
+    socket.volatile.emit("chat_message", msg);
 }
 
 export const getMessage = callback => {
-    socket.on("chat message", msg => {
+    socket.on("chat_message", msg => {
         callback(msg);
     })
 }

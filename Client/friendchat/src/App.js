@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Col from "react-bootstrap/Col";
 import ChatBox from "./components/chatbox/ChatBox";
-import Login from "./routes/login/login";
-import UserList from "./components/users/userList";
+import Login from "./routes/login/Login";
+import Users from "./components/users/Users";
 import { getAllUsers, connectUser } from "./services/userServices";
 import { getMessage, sendMessage } from "./services/messageService";
 import Input from "./components/input/input";
+import Profile from "./components/profile/Profile";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -22,6 +23,11 @@ function App() {
   const handleSendMessage = (msg) => {
     sendMessage({ sender: user.username, text: msg });
   };
+
+  const handleChangeStatus = status => {
+    console.log(status)
+    setUser({ ...user, status: status });
+  }
 
   useEffect(() => {
     getAllUsers(setAllUsers);
@@ -43,7 +49,10 @@ function App() {
   return (
     <>
       <Col sm={3} style={{ marginRight: "10px" }}>
-        <UserList users={allUsers} />
+        <div className="side-bar rounded-top bg-light">
+          <Profile user={user} onChangeStatus={handleChangeStatus} />
+          <Users users={allUsers} />
+        </div>
       </Col>
 
       <Col sm={true} className="chat-box">

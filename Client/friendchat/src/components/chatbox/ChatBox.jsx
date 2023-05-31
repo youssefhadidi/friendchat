@@ -1,7 +1,7 @@
 import "./chatBox.css";
 import React, { useState, useEffect } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
-import Message from "../message/message";
+import Message from "../message/Message";
 
 function ChatBox({ messages }) {
   useEffect(() => {
@@ -10,7 +10,11 @@ function ChatBox({ messages }) {
   }, [messages]);
 
   return (
-    <ListGroup as="ul" className="chatBox" variant="flush">
+    <ListGroup
+      as="ul"
+      className="chatBox"
+      variant="flush"
+    >
       {messages.map((msg, index) => (
         <Message sender={msg.sender} text={msg.text} key={index} />
       ))}

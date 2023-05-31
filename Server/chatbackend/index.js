@@ -15,15 +15,12 @@ app.use('/api/users', userRouter)
 
 io.on('connection', socket => {
   console.log("a user connect")
-  socket.on("chat message", msg =>{
-    io.emit("chat message", msg);
+  socket.on("chat_message", msg =>{
+    io.emit("chat_message", msg);
   })
 
   registerUserHandlers(io, socket);
 });
-
-
-// io.on('receive',value, receive)
 
 const port = process.env.PORT || 4000;
 server.listen(port, () => {

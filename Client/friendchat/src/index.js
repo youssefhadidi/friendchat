@@ -5,7 +5,7 @@ import './index.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from './App';
 import ErrorPage from './routes/errorPage';
-import Root from './routes/root';
+import Root from './routes/Root';
 
 const router = createBrowserRouter([
   {
