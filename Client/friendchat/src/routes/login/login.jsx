@@ -37,9 +37,7 @@ const Login = ({onLogin}) => {
       return e.target.value
     });
   }
-
   
-
   useEffect(() => {
     if (username === "")
       setError("");

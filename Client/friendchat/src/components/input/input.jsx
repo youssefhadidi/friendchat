@@ -40,7 +40,9 @@ const Input = ({ onSubmit }) => {
           variant="outline-secondary"
           id="button-addon2"
           onClick={handleFile}
-        >Choose file</Button>
+        >
+          Choose file
+        </Button>
         <Button variant="outline-secondary" id="button-addon2" type="submit">
           Send
         </Button>

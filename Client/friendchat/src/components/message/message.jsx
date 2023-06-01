@@ -7,7 +7,7 @@ function Message({ sender, payload }) {
   const renderMessage = () => {
     const { type, data } = payload;
     if (/^image/.test(type))
-      return <img src={data} alt="" />
+      return <img src={data} alt="" width="400"/>
     
     return data;
   }

@@ -21,6 +21,10 @@ export const connectUser = user => {
     socket.emit("user_login", user);
 }
 
+export const disconnect = () => {
+    socket.disconnect();
+}
+
 export const getAllUsers = callBack => {
     socket.on("all_users", users => {
         callBack(users);
