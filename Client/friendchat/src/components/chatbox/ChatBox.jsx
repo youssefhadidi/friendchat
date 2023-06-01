@@ -16,7 +16,7 @@ function ChatBox({ messages }) {
       variant="flush"
     >
       {messages.map((msg, index) => (
-        <Message sender={msg.sender} text={msg.text} key={index} />
+        <Message sender={msg.sender} key={index} payload={msg.payload} />
       ))}
     </ListGroup>
   );

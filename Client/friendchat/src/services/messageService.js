@@ -21,20 +21,28 @@ const fileOptions = {
     multiple: false
 };
 
-export const getFile = async getUrl => {
+export const getFile = async () => {
   let file;
   try {
     const [fileHandle] = await window.showOpenFilePicker();
     file = await fileHandle.getFile(fileOptions);
+    
   } catch (error) {
     if (error) {
       return;
     }
   }
-  const reader = new FileReader();
-  reader.onload = () => {
-      const dataUrl = reader.result;
-      getUrl(dataUrl);
-  };
-  reader.readAsDataURL(file);
+  return file;
 };  
+
+export const reader = file => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.onload = () => resolve(fileReader.result);
+    
+    fileReader.onerror = err => reject(err);
+    fileReader.readAsDataURL(file);
+  })
+}
+
+// file.type = "image/jpeg"

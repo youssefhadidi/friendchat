@@ -3,21 +3,28 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import './input.css';
 import { useState, useEffect } from "react";
-import { getFile } from "../../services/messageService";
+import { getFile, reader } from "../../services/messageService";
 
 const Input = ({ onSubmit }) => {
   const [value, setValue] = useState("");
-  const [dataUrl, setDataUrl] = useState("");
+  const [file, setFile] = useState(null);
     
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit(value);
+    onSubmit({ payload: { type: "text", data: value } });
     setValue('');
   }
 
+  // no idea how to call this function
+  const handleFile = async () => {
+    const file = await getFile(); 
+    setFile(file);
+  }
+
   useEffect(() => {
-    //onSubmit(dataUrl)
-  }, [dataUrl])
+    if(file)
+      reader(file).then(res => onSubmit({payload: {type: file.type, data: res}}));
+  }, [file])
 
   return (
     <Form onSubmit={(e) => handleSubmit(e)}>
@@ -32,7 +39,7 @@ const Input = ({ onSubmit }) => {
         <Button
           variant="outline-secondary"
           id="button-addon2"
-          onClick={() => getFile(setDataUrl)}
+          onClick={handleFile}
         >Choose file</Button>
         <Button variant="outline-secondary" id="button-addon2" type="submit">
           Send
