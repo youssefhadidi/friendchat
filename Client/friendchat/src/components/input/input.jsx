@@ -1,30 +1,30 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import './input.css';
+import "./input.css";
 import { useState, useEffect } from "react";
-import { getFile, reader } from "../../services/messageService";
+import { getFile, reader } from "../../utils/utils";
 
 const Input = ({ onSubmit }) => {
   const [value, setValue] = useState("");
   const [file, setFile] = useState(null);
-    
-  const handleSubmit = e => {
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({ payload: { type: "text", data: value } });
-    setValue('');
-  }
+    setValue("");
+  };
 
   // no idea how to call this function
   const handleFile = async () => {
-    const file = await getFile(); 
+    const file = await getFile();
     setFile(file);
-  }
+  };
 
   useEffect(() => {
     if(file)
       reader(file).then(res => onSubmit({payload: {type: file.type, data: res}}));
-  }, [file])
+  }, [file]);
 
   return (
     <Form onSubmit={(e) => handleSubmit(e)}>

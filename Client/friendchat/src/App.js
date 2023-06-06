@@ -25,13 +25,14 @@ function App() {
   };
 
   const handleSendMessage = (msg) => {
+    console.log(msg.payload.data)
     sendMessage({ sender: user.username, ...msg });
   };
 
-  const handleChangeStatus = status => {
+  const handleChangeStatus = (status) => {
     setUser({ ...user, status: status });
     updateUserStatus(status);
-  }
+  };
 
   useEffect(() => {
     getAllUsers(setAllUsers);
