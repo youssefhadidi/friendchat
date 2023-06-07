@@ -17,7 +17,7 @@ app.use('/api/users', userRouter)
 io.on('connection', socket => {
   
   socket.on("chat_message", msg => {
-    if (/^image/.test(msg.payload.type)) {
+    /*if (/^image/.test(msg.payload.type)) {
       const result = imageResizingProcess(msg.payload);
       result
         .then((dataUrl) => {
@@ -25,8 +25,8 @@ io.on('connection', socket => {
           return msg;
         })
         .then((res) => io.emit("chat_message", res));
-    } else 
-        io.emit("chat_message", msg);
+    } else */
+    io.emit("chat_message", msg);
   })
 
   registerUserHandlers(io, socket);

@@ -2,15 +2,6 @@ const parseDataUrl = require("parse-data-url");
 const fs = require("fs");
 const sharp = require('sharp');
 
-// convert dataUrl to buffer
-// write it in a file
-// resize it
-// distribute file
-// delete file right away
-
-/*const pattern = /\w+/g;
-const result = "image/jpeg".match(pattern)[1];*/
-
 const createFile = payload => {
     const buffer = parseDataUrl(payload.data).toBuffer();
 
@@ -75,4 +66,3 @@ const imageResizingProcess = async payload => {
 
 module.exports = { imageResizingProcess, removeFile };
 
-// data:image/webp;base64,

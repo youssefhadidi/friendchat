@@ -6,10 +6,12 @@ function Message({ sender, payload }) {
 
   const renderMessage = () => {
     const { type, data } = payload;
-    if (/^image/.test(type))
-      return <img src={data} alt="" />
+
+    if (/^image/.test(type)) {
+      return <img src={data} width="400px" alt=""/> 
+    }
     
-    return data;
+    return payload.data;
   }
   return (
     <ListGroup.Item

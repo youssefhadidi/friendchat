@@ -25,7 +25,6 @@ function App() {
   };
 
   const handleSendMessage = (msg) => {
-    console.log(msg.payload.data)
     sendMessage({ sender: user.username, ...msg });
   };
 

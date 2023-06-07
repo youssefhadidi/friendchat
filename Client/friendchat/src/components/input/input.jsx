@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import "./input.css";
 import { useState, useEffect } from "react";
-import { getFile, reader } from "../../utils/utils";
+import { getFile, fileToDataUrl } from "../../utils/utils";
 
 const Input = ({ onSubmit }) => {
   const [value, setValue] = useState("");
@@ -22,8 +22,12 @@ const Input = ({ onSubmit }) => {
   };
 
   useEffect(() => {
-    if(file)
-      reader(file).then(res => onSubmit({payload: {type: file.type, data: res}}));
+    if (file)
+      fileToDataUrl(file).then(dataUrl => {
+        if (/^image/.test(file.type)) 
+          onSubmit({payload: {type: file.type, data: dataUrl}})
+      }   
+      );
   }, [file]);
 
   return (
