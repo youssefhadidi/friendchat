@@ -2,6 +2,7 @@
 import "./users.css";
 
 const Users = ({ users }) => {
+
   return (
     <ul className="users scroll rounded-top bg-white">
       {users.map((user, index) => (
@@ -18,3 +19,5 @@ const Users = ({ users }) => {
 };
 
 export default Users;
+
+// user = {username: String, id: number, status: String};

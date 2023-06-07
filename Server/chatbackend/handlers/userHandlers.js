@@ -30,7 +30,7 @@ const validateUser = user => {
 const registerUserHandlers = (io, socket) => {
     socket.on("user_login", (user) => { 
         socket.username = user.username.toLowerCase();
-        socket.id = user.id;
+        socket.userId = user.id;
         const usersData = Object.values(users);
       io.emit("all_users", usersData);
     });

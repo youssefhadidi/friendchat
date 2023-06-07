@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Col from "react-bootstrap/Col";
 import ChatBox from "./components/chatbox/ChatBox";
-import Login from "./routes/login/Login";
+import Login from "./components/login/Login";
 import Users from "./components/users/Users";
 import {
   getAllUsers,
@@ -10,7 +10,6 @@ import {
   updateUserStatus,
 } from "./services/userServices";
 import { getMessage, sendMessage } from "./services/messageService";
-import Input from "./components/input/input";
 import Profile from "./components/profile/Profile";
 
 function App() {
@@ -18,6 +17,7 @@ function App() {
   const [allUsers, setAllUsers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
+  const [rooms, setRooms] = useState([]);
 
   const handleLogin = (user) => {
     setUser(user);
@@ -58,11 +58,7 @@ function App() {
           <Users users={allUsers} />
         </div>
       </Col>
-
-      <Col sm={true} className="chat-box">
-        <ChatBox messages={messages} />
-        <Input onSubmit={handleSendMessage} />
-      </Col>
+      <ChatBox messages={messages} onSendMessage={handleSendMessage}/>
     </>
   );
 }

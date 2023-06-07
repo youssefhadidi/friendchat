@@ -10,7 +10,6 @@ export const register = user => {
 // Client-side username validation
 export const validateUsername = username => {
     const regexPattern = /^[A-Za-z0-9]/;
-    console.log("client side validation")
     const valid = regexPattern.test(username);
     if (!valid) return "Invalid Username";
 
@@ -18,7 +17,7 @@ export const validateUsername = username => {
 } 
 
 export const connectUser = user => {
-    socket.emit("user_login", user);
+    socket.volatile.emit("user_login", user);
 }
 
 export const disconnect = () => {
