@@ -17,7 +17,7 @@ function App() {
   const [allUsers, setAllUsers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
-  const [rooms, setRooms] = useState([]);
+  const [rooms, setRoom] = useState([]);
 
   const handleLogin = (user) => {
     setUser(user);
@@ -25,7 +25,7 @@ function App() {
   };
 
   const handleSendMessage = (msg) => {
-    sendMessage({ sender: user.username, ...msg });
+    sendMessage({ sender: user.username, ...msg, to: "#public" });
   };
 
   const handleChangeStatus = (status) => {
@@ -64,3 +64,9 @@ function App() {
 }
 
 export default App;
+
+/* { sender: user.username,
+     payload: {type: String,
+               data: String},
+
+     to: "#public" }*/
