@@ -1,8 +1,9 @@
-import { action, thunk } from "easy-peasy";
+import { action, thunk, computed } from "easy-peasy";
 import {
   connectUser,
   register,
   updateUserStatus,
+
 } from "./services/userServices";
 
 const model = {
@@ -31,13 +32,15 @@ const model = {
 
   allUsers: [],
   setAllUsers: action((state, payload) => {
-    state.users = payload;
+    state.allUsers = payload;
   }),
 
-  rooms: [],
-  addRoom: action((state, room) => {
-    state.rooms.push(room);
+  rooms: {},
+  addRoom: action((state, {key, roomId}) => {
+    state.rooms[key] = {roomId};
   }),
+  getRooms: computed(state => Object.entries(state.rooms)),
+  roomKeys: computed(state => Object.keys(state.rooms))
 };
 
 export default model;

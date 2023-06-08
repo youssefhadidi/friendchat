@@ -1,8 +1,14 @@
-import React from 'react';
-import { Nav } from 'bootstrap-4-react';
+import React, {useState, useEffect} from 'react';
+import ChatBox from '../chatbox/ChatBox';
 
-const Room = ({}) => {
-    return (  );
+const Room = () => {
+    
+    const [currentMessage, setCurrentMessage] = useState("");
+    const [messages, setMessages] = useState([]);
+    
+    const handleSendMessage = () => { }
+
+    return <ChatBox messages={messages} onSendMessage={handleSendMessage} />;
 }
  
 export default Room;

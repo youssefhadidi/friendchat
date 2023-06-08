@@ -1,7 +1,17 @@
 //import { Link } from "react-router-dom";
 import "./users.css";
+import { useEffect } from "react";
+import { useStoreState, useStoreActions } from "easy-peasy";
+import { getAllUsers } from '../../services/userServices';
 
-const Users = ({ users }) => {
+
+const Users = () => {
+  const { allUsers: users } = useStoreState(state => state);
+  const setAllUsers = useStoreActions(actions => actions.setAllUsers);
+
+  useEffect(() => {
+    getAllUsers(setAllUsers);
+  }, [users]);
 
   return (
     <ul className="users scroll rounded-top bg-white">

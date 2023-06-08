@@ -2,31 +2,20 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import Col from "react-bootstrap/Col";
-import ChatBox from "./components/chatbox/ChatBox";
 import Login from "./components/login/login";
 import Users from "./components/users/Users";
 import Profile from "./components/profile/Profile";
-import { getAllUsers } from "./services/userServices";
 import { getMessage, sendMessage } from "./services/messageServices";
+import Rooms from "./components/rooms/Rooms";
 
 function App() {
   const user = useStoreState(state => state.user);
-  const [allUsers, setAllUsers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
 
   const handleSendMessage = (msg) => {
     sendMessage({ sender: user.username, ...msg, roomId: "#public" });
   };
-
-  /*const handleChangeStatus = (status) => {
-    setUser({ ...user, status: status });
-    updateUserStatus(status);
-  };*/
-
-  useEffect(() => {
-    getAllUsers(setAllUsers);
-  }, [allUsers]);
 
   useEffect(() => {
     getMessage(setCurrentMessage);
@@ -46,10 +35,10 @@ function App() {
       <Col sm={3} style={{ marginRight: "10px" }}>
         <div className="side-bar rounded-top bg-light">
           <Profile />
-          <Users users={allUsers} />
+          <Users />
         </div>
       </Col>
-      <ChatBox messages={messages} onSendMessage={handleSendMessage} />
+      <Rooms/>
     </>
   );
 }

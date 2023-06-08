@@ -1,20 +1,18 @@
 import React from 'react';
-import { Nav } from 'bootstrap-4-react';
+import { useStoreState, useStoreActions } from "easy-peasy";
+import Tabs from '../tabs/Tabs';
+import Room from '../room/Room';
 
-const Rooms = ({ rooms }) => {
+const Rooms = () => {
+  const rooms = useStoreState(state => state.getRooms); // [[key, roomId], ...]
+  const roomKeys = useStoreState(state => state.roomKeys);
   
-    return (
-      <Nav tabs>
-        <Nav.Item active href="#">
-          Active
-        </Nav.Item>
-        <Nav.Item href="#">Link</Nav.Item>
-        <Nav.Item href="#">Link</Nav.Item>
-        <Nav.Item href="#" disabled>
-          Disabled
-        </Nav.Item>
-      </Nav>
-    );
+  return (
+    <>
+      <Tabs tabs={roomKeys} />
+      {rooms.map((room, index) => <Room/>)}
+    </>
+  );
 }
  
 export default Rooms;
