@@ -3,22 +3,23 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import "./login.css";
 import { useState, useEffect } from "react";
-import { register, validateUsername } from "../../services/userServices";
+import { useStoreState, useStoreActions } from 'easy-peasy';
+import { validateUsername } from "../../services/userServices";
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
-  const [error, setError] = useState("");
+  const {onLogin, setLoginError} = useStoreActions(actions => actions); 
+  const loginError = useStoreState(state => state.loginError);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Client-side validation
     const error = validateUsername(username);
     if (error) {
-      setError(error);
+      setLoginError(error);
       return;
     }
-
-    let user;
+    /*let user;
     try {
       const { data } = await register({ username });
       user = data;
@@ -26,19 +27,19 @@ const Login = ({ onLogin }) => {
       setError(error.response.data);
       return;
     }
-    onLogin(user);
+    onLogin(user);*/
+    onLogin({ username });
   };
 
   const handleChange = (e) => {
     setUsername((prevState, state) => {
-      if (prevState !== state && error) setError("");
-
+      if (prevState !== state && loginError) setLoginError("");
       return e.target.value;
     });
   };
 
   useEffect(() => {
-    if (username === "") setError("");
+    if (username === "") setLoginError("");
   }, [username]);
 
   return (
@@ -54,8 +55,8 @@ const Login = ({ onLogin }) => {
           required
         />
       </Form.Group>
-      {error && <Alert variant="secondary error-message">{error}</Alert>}
-      <Button variant="primary" type="submit" disabled={!username || error}>
+      {loginError && <Alert variant="secondary error-message">{loginError}</Alert>}
+      <Button variant="primary" type="submit" disabled={!username || loginError}>
         Join Chat
       </Button>
     </Form>

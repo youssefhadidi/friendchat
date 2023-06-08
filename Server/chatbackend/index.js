@@ -15,6 +15,7 @@ app.use(cors());
 app.use('/api/users', userRouter)
 
 io.on('connection', socket => {
+
   registerUserHandlers(io, socket);
   updateUserData(io, socket);
   publicMessagesHandler(io, socket);

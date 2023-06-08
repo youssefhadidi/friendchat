@@ -1,7 +1,8 @@
 import React from 'react';
 import { Nav } from 'bootstrap-4-react';
 
-const Tabs = ({rooms}) => {
+const Rooms = ({ rooms }) => {
+  
     return (
       <Nav tabs>
         <Nav.Item active href="#">
@@ -16,4 +17,4 @@ const Tabs = ({rooms}) => {
     );
 }
  
-export default Tabs;
+export default Rooms;

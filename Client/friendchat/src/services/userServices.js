@@ -24,10 +24,10 @@ export const disconnect = () => {
     socket.disconnect();
 }
 
-export const getAllUsers = callBack => {
+export const getAllUsers = setAllUsers => {
     socket.on("all_users", users => {
-        callBack(users);
-    } )
+        setAllUsers(users);
+    })
 }
 
 export const updateUserStatus = status => {

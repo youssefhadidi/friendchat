@@ -28,13 +28,15 @@ const validateUser = user => {
 }
 
 const registerUserHandlers = (io, socket) => {
+    const roomId = "#public";
+  
     socket.on("user_login", (user) => { 
       socket.username = user.username.toLowerCase();
       socket.userId = user.id;
-      
-      socket.join("#public");
+      socket.join(roomId);
+
       const usersData = Object.values(users);
-      io.to("#public").emit("all_users", usersData);
+      io.to(roomId).emit("all_users", usersData);
     });
 
     socket.on("disconnect", () => {

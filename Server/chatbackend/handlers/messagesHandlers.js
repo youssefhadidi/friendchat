@@ -2,7 +2,7 @@ const { getUser } = require("./userHandlers");
 
 const publicMessagesHandler = (io, socket) => {
     socket.on("chat_message", packet => {
-      io.to(packet.to).emit("chat_message", packet);
+      io.to(packet.roomId).emit("chat_message", packet);
     });
 }
 
@@ -16,12 +16,15 @@ const privateMessagesHandler = (io, socket) => {
             socket.join(roomId);
             toSocket.join(roomId);
 
-            io.to(roomId).emit("join_private_room", {from: getUser(socket.username), to: getUser(socket.username)});
+            io.to(roomId).emit("join_private_room", {sender: getUser(socket.username), to: getUser(toSocket.username), roomId});
         } catch (error) {
             console.log(error);
         }
     });
 
+    socket.on("private_message", packet => {
+        io.to(packet.roomId).emit("private_message", packet);
+    });
 
 }
 
