@@ -37,7 +37,7 @@ const model = {
 
   rooms: {},
   addRoom: action((state, {key, roomId}) => {
-    state.rooms[key] = {roomId};
+    state.rooms[key] = roomId;
   }),
   getRooms: computed(state => Object.entries(state.rooms)),
   roomKeys: computed(state => Object.keys(state.rooms))

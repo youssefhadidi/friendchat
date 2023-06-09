@@ -3,7 +3,7 @@
 }
 
 .chat-box {
-  height: 100vh;
+  height: 90vh;
 }
 
 .side-bar {
@@ -12,6 +12,17 @@
     width: inherit;
     height: 100vh;
     padding: 10px;
+}
+
+.chat-section {
+    position: fixed;
+
+    width: inherit;
+    padding: 10px;
+}
+
+.float-right {
+    position: relative;
 }
 
 /* Status display */

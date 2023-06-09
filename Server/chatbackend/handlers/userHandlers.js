@@ -28,15 +28,18 @@ const validateUser = user => {
 }
 
 const registerUserHandlers = (io, socket) => {
-    const roomId = "#public";
   
-    socket.on("user_login", (user) => { 
-      socket.username = user.username.toLowerCase();
-      socket.userId = user.id;
-      socket.join(roomId);
+  socket.on("user_login", user => {
+    /** user = {username: String, id: Number, isInPublic: boolean} */
+    socket.username = user.username.toLowerCase();
+    socket.userId = user.id;
+    
+    if(user.isInPublic)
+      socket.join("#public");
 
-      const usersData = Object.values(users);
-      io.to(roomId).emit("all_users", usersData);
+    const usersData = Object.values(users);
+    io.to('#public').emit("all_users", usersData);
+      
     });
 
     socket.on("disconnect", () => {

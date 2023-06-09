@@ -5,6 +5,7 @@ class User {
     this.username = name;
     this.id = count++;
     this.status = "online"
+    this.isInPublic = true;
   }
 }
 

@@ -19,15 +19,7 @@ const Login = () => {
       setLoginError(error);
       return;
     }
-    /*let user;
-    try {
-      const { data } = await register({ username });
-      user = data;
-    } catch (error) {
-      setError(error.response.data);
-      return;
-    }
-    onLogin(user);*/
+  
     onLogin({ username });
   };
 
