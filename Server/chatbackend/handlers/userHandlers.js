@@ -4,6 +4,7 @@ const router = express.Router();
 
 // changed array to object for faster lookup operation
 const users = {};
+const sockets = {};
 
 router.post('/', (req, res) => {
     const error = validateUser(req.body);
@@ -31,8 +32,13 @@ const registerUserHandlers = (io, socket) => {
   
   socket.on("user_login", user => {
     /** user = {username: String, id: Number, isInPublic: boolean} */
-    socket.username = user.username.toLowerCase();
-    socket.userId = user.id;
+
+    socket.data.username = user.username.toLowerCase();
+    socket.data.userId = user.id;
+
+    /** add current socket to sockets, using user's id as its key */
+    sockets[user.id] = socket;
+    console.log(sockets)
     
     if(user.isInPublic)
       socket.join("#public");
@@ -43,9 +49,8 @@ const registerUserHandlers = (io, socket) => {
     });
 
     socket.on("disconnect", () => {
-      delete users[socket.username];
+      delete users[socket.data.username];
       const usersData = Object.values(users);
-      console.log(usersData);
 
       io.emit("all_users", usersData);
       console.log("user disconnect");
@@ -54,7 +59,7 @@ const registerUserHandlers = (io, socket) => {
 
 const updateUserData = (io, socket) => {
   socket.on("update_status", status => {
-    const user = users[socket.username];
+    const user = users[socket.data.username];
     user.status = status;
     const usersData = Object.values(users);
     io.emit("all_users", usersData);
@@ -65,4 +70,8 @@ const getUser = username => {
   return users[username];
 }
 
-module.exports = {userRouter: router, registerUserHandlers, updateUserData, getUser};
+const getSocket = userId => {
+  return sockets[userId];
+}
+
+module.exports = {userRouter: router, registerUserHandlers, updateUserData, getUser, getSocket};

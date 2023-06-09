@@ -16,13 +16,8 @@
 
 .chat-section {
     position: fixed;
-
     width: inherit;
     padding: 10px;
-}
-
-.float-right {
-    position: relative;
 }
 
 /* Status display */

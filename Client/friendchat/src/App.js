@@ -5,10 +5,9 @@ import Col from "react-bootstrap/Col";
 import Login from "./components/login/login";
 import Users from "./components/users/Users";
 import Profile from "./components/profile/Profile";
-
 import Rooms from "./components/rooms/Rooms";
 
-function App() {
+function App() {  
   const user = useStoreState(state => state.user);
   const { addRoom } = useStoreActions(actions => actions);
 

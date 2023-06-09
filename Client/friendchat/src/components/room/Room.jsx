@@ -14,10 +14,10 @@ const Room = ({roomId}) => {
 
     useEffect(() => {
       getMessage(setCurrentMessage);
-    }, [messages]);
+    }, []);
 
     useEffect(() => {
-      if (currentMessage) {
+      if (currentMessage && currentMessage.to === roomId) {
         const allMessages = [...messages, currentMessage];
         setMessages(allMessages);
       }
