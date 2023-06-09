@@ -2,7 +2,6 @@ const express = require("express");
 const User = require("./User");
 const router = express.Router();
 
-// changed array to object for faster lookup operation
 const users = {};
 const sockets = {};
 
@@ -38,7 +37,6 @@ const registerUserHandlers = (io, socket) => {
 
     /** add current socket to sockets, using user's id as its key */
     sockets[user.id] = socket;
-    console.log(sockets)
     
     if(user.isInPublic)
       socket.join("#public");

@@ -40,7 +40,14 @@ const model = {
     state.rooms[key] = roomId;
   }),
   getRooms: computed(state => Object.entries(state.rooms)),
-  roomKeys: computed(state => Object.keys(state.rooms))
+  hasRoom: computed(state => {
+    return key => state.rooms.hasOwnProperty(key);
+  }),
+  roomKeys: computed(state => Object.keys(state.rooms)),
+  saveMessages: action((state, payload) => {
+    const { key, messages } = payload;
+    state.rooms[key].messages = messages;
+  })
 };
 
 export default model;

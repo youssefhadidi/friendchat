@@ -5,6 +5,7 @@ import { getMessage, sendMessage } from "../../services/messageServices";
 
 const Room = ({roomId}) => {
     const { user } = useStoreState(state => state);
+    //const { saveMessages } = useStoreActions(actions => actions);
     const [currentMessage, setCurrentMessage] = useState("");
     const [messages, setMessages] = useState([]);
     

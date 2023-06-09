@@ -26,10 +26,10 @@ const Rooms = () => {
 
   return (
     <>
-      <Tabs className="mb-3 tabs">
+      <Tabs className="mb-3 tabs bg-light">
         {rooms.map(([key, roomId], index) => (
-          <Tab eventKey={key} title={key}>
-            <Room roomId={roomId} key={index} />
+          <Tab eventKey={key} title={key} key={index}>
+            <Room roomId={roomId} roomKey={key} key={index} />
           </Tab>
         ))}
       </Tabs>
