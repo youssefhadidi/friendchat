@@ -1,4 +1,4 @@
-//import { Link } from "react-router-dom";
+
 import "./users.css";
 import { useEffect } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
@@ -12,7 +12,6 @@ const Users = () => {
     getAllUsers(setAllUsers);
   }, [users]);
 
-  // requestPrivateRoom({sender: user.username, to: user.id})
   return (
     <ul className="users scroll rounded-top bg-white">
       {users.map((user, index) => (

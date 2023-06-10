@@ -1,9 +1,7 @@
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
 import React, {useEffect, useState} from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import { getMessage } from "../../services/messageServices";
-import Room from "../room/Room";
+import RoomTabs from "../roomTabs/roomTabs";
 
 const Rooms = () => {
   const { addRoom, forwardMessageToRoom } = useStoreActions(actions => actions);
@@ -29,7 +27,6 @@ const Rooms = () => {
       return addRoom({ key: sender, roomId: sender, msg: packet });
     } else
       forwardMessageToRoom({ key: sender, msg: packet });
-    
   }
 
   useEffect(() => {
@@ -41,17 +38,7 @@ const Rooms = () => {
       checkPacket(currentMessage);
   }, [currentMessage])
 
-  return (
-    <>
-      <Tabs className="mb-3 tabs bg-light">
-        {rooms.map(([key], index) => (
-          <Tab eventKey={key} title={key} key={index}>
-            <Room roomKey={key} key={index} />
-          </Tab>
-        ))}
-      </Tabs>
-    </>
-  );
+  return <RoomTabs rooms={ rooms } />;
 };
 
 export default Rooms;
