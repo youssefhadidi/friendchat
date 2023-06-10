@@ -2,6 +2,7 @@ import "./message.css";
 import React from "react";
 import ListGroup from "react-bootstrap/esm/ListGroup";
 
+
 function Message({ sender, payload }) {
 
   const renderMessage = () => {

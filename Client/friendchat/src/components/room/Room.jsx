@@ -1,28 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useStoreState, useStoreActions } from "easy-peasy";
 import ChatBox from '../chatbox/ChatBox';
-import { getMessage, sendMessage } from "../../services/messageServices";
+import { sendMessage } from "../../services/messageServices";
 
-const Room = ({roomId}) => {
+const Room = ({roomKey}) => {
     const { user } = useStoreState(state => state);
-    //const { saveMessages } = useStoreActions(actions => actions);
-    const [currentMessage, setCurrentMessage] = useState("");
+    const currentRoom = useStoreState(state => state.getRoom(roomKey));
     const [messages, setMessages] = useState([]);
     
     const handleSendMessage = (msg) => {
-      sendMessage({ sender: user.username, to: roomId,...msg });
+      sendMessage({ sender: user.username, to: roomKey, ...msg });
+      console.log(msg);
     };
 
     useEffect(() => {
-      getMessage(setCurrentMessage);
-    }, []);
-
-    useEffect(() => {
-      if (currentMessage && currentMessage.to === roomId) {
-        const allMessages = [...messages, currentMessage];
-        setMessages(allMessages);
-      }
-    }, [currentMessage]);
+      const { messages } = currentRoom;
+      setMessages(messages);
+    }, [currentRoom]);
 
     return <ChatBox messages={messages} onSendMessage={handleSendMessage} />;
 }

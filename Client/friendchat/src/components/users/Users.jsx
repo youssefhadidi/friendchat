@@ -3,21 +3,20 @@ import "./users.css";
 import { useEffect } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import { getAllUsers } from '../../services/userServices';
-import { requestPrivateRoom } from "../../services/messageServices";
-
 
 const Users = () => {
   const { allUsers: users } = useStoreState(state => state);
-  const {setAllUsers} = useStoreActions(actions => actions);
+  const {setAllUsers, addRoom} = useStoreActions(actions => actions);
 
   useEffect(() => {
     getAllUsers(setAllUsers);
   }, [users]);
 
+  // requestPrivateRoom({sender: user.username, to: user.id})
   return (
     <ul className="users scroll rounded-top bg-white">
       {users.map((user, index) => (
-        <li key={index} onClick={() => requestPrivateRoom({sender: user.username, to: user.id})}>
+        <li key={index} onClick={() => addRoom({key: user.username, roomId: user.username})}>
           <i
             className={"fa fa-circle status " + user.status}
             aria-hidden="true"

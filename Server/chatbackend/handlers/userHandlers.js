@@ -36,7 +36,7 @@ const registerUserHandlers = (io, socket) => {
     socket.data.userId = user.id;
 
     /** add current socket to sockets, using user's id as its key */
-    sockets[user.id] = socket;
+    sockets[user.username] = socket;
     
     if(user.isInPublic)
       socket.join("#public");
@@ -68,8 +68,8 @@ const getUser = username => {
   return users[username];
 }
 
-const getSocket = userId => {
-  return sockets[userId];
+const getSocket = username => {
+  return sockets[username];
 }
 
 module.exports = {userRouter: router, registerUserHandlers, updateUserData, getUser, getSocket};

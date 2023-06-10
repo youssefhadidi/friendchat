@@ -34,20 +34,28 @@ const model = {
   setAllUsers: action((state, payload) => {
     state.allUsers = payload;
   }),
-
+  
   rooms: {},
-  addRoom: action((state, {key, roomId}) => {
-    state.rooms[key] = roomId;
+  addRoom: action((state, { key, roomId, msg }) => {
+    state.rooms[key] = { roomId };
+    state.rooms[key].messages = [];
+    if (msg)
+      state.rooms[key].messages.push(msg);
   }),
   getRooms: computed(state => Object.entries(state.rooms)),
+  getRoom: computed(state => {
+    return key => state.rooms[key];
+  }),
   hasRoom: computed(state => {
     return key => state.rooms.hasOwnProperty(key);
   }),
   roomKeys: computed(state => Object.keys(state.rooms)),
-  saveMessages: action((state, payload) => {
-    const { key, messages } = payload;
-    state.rooms[key].messages = messages;
+  forwardMessageToRoom: action((state, packet) => {
+    const { key, msg } = packet;
+    console.log("in forward method: ", packet)
+    state.rooms[key].messages.push(msg);
   })
+
 };
 
 export default model;

@@ -5,7 +5,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const { userRouter, registerUserHandlers, updateUserData } = require("./handlers/userHandlers");
-const { messagesDelivery, roomServicesHandler } = require('./handlers/messagesHandlers');
+const { messagesDelivery } = require('./handlers/messagesHandlers');
 
 const io = new Server(server, { cors: { origin: '*' } });
 
@@ -18,7 +18,7 @@ io.on('connection', socket => {
   
   registerUserHandlers(io, socket);
   updateUserData(io, socket);
-  roomServicesHandler(io, socket);
+  //roomServicesHandler(io, socket);
   messagesDelivery(io, socket);
 
 });

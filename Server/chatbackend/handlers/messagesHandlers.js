@@ -2,14 +2,20 @@ const { getUser, getSocket } = require("./userHandlers");
 
 const messagesDelivery = (io, socket) => {  
     socket.on("chat_message", packet => {
-        io.to(packet.to).emit("chat_message", packet);
+        const receiver = packet.to;
+        if(receiver === "#public")
+            io.to(receiver).emit("chat_message", packet);
+        else {
+            const senderSocketID = getSocket(packet.sender).id;
+            const receiverSocketID = getSocket(receiver).id;
+            io.to([senderSocketID, receiverSocketID]).emit("chat_message", packet);
+        }
     })
 }
 
-const roomServicesHandler = (io, socket) => {  
+/*const roomServicesHandler = (io, socket) => {  
     socket.on("set_private_room", async request => {
-        /**request = {sender, to} */
-        console.log("room request");
+        /**request = {sender, to} 
 
         const receiverId = request.to;
         const roomId = socket.data.userId + receiverId;
@@ -27,9 +33,9 @@ const roomServicesHandler = (io, socket) => {
         });
         
     })  
-}
+}*/
 
-module.exports = { messagesDelivery, roomServicesHandler };
+module.exports = { messagesDelivery };
 
 /* { sender: user.username,
      payload: {type: String,
