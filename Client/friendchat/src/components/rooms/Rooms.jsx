@@ -1,14 +1,14 @@
 import "./rooms.css";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
-import CloseButton from "react-bootstrap/CloseButton";
 import React, { useEffect, useState } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import { getMessage } from "../../services/messageServices";
 import Room from "../room/Room";
 
 const Rooms = ({ rooms, onCheckPacket }) => {
-  const {onReadMessages, storeRoomData, removeRoom} = useStoreActions(actions => actions)
+  const { onReadMessages, storeRoomData, removeRoom } = useStoreActions(actions => actions);
+  const hasRoom = useStoreState(state => state.hasRoom);
   const [currentMessage, setCurrentMessage] = useState("");
   const [newActiveKey, setNewActiveKey] = useState("");
   const [unreadCount, setUnreadCount] = useState({ });
@@ -25,8 +25,8 @@ const Rooms = ({ rooms, onCheckPacket }) => {
   }
 
   const handleCloseRoom = roomKey => {
-    storeRoomData(roomKey);
-    removeRoom(roomKey);
+    storeRoomData(roomKey); // temporrily store current room's data in localStorage
+    removeRoom(roomKey); // remove current room
   }
 
   useEffect(() => {
@@ -48,10 +48,14 @@ const Rooms = ({ rooms, onCheckPacket }) => {
       ) {
         setNewActiveKey(newRoom[0]);
       }
+
+      if (!hasRoom(newActiveKey))
+        handleSelectKey("#public");
     }
   }, [rooms]);
 
   useEffect(() => {
+    /** when a tab is selected, all unread messages of the given room are moved to readMessages so they can be displayed in chatbox*/
     if(newActiveKey)
       onReadMessages(newActiveKey);
   }, [newActiveKey, currentMessage])
@@ -60,7 +64,7 @@ const Rooms = ({ rooms, onCheckPacket }) => {
     return (
       <>
         {tabKey}
-        {unreadCount[tabKey] > 0 && (
+        {(unreadCount[tabKey] > 0) && (
           <span className="unread-badge">
             <span className="badge-content">{unreadCount[tabKey]}</span>
           </span>
