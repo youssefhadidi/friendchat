@@ -46,6 +46,9 @@ const model = {
     if (msg)
       state.rooms[key].unreadMessages.push(msg);
   }),
+  updateRoom: action((state, {roomKey, roomData}) => {
+    state.rooms[roomKey] = roomData;
+  }),
   getRooms: computed(state => Object.entries(state.rooms)),
   getRoom: computed(state => {
     return key => state.rooms[key];
@@ -54,7 +57,15 @@ const model = {
     return key => state.rooms.hasOwnProperty(key);
   }),
   roomKeys: computed(state => Object.keys(state.rooms)),
-
+  removeRoom: action((state, roomKey) => {
+    delete state.rooms[roomKey];
+  }),
+  storeRoomData: action((state, roomKey) => {
+    const room = state.rooms[roomKey];
+    if (room) 
+      localStorage.setItem(roomKey, JSON.stringify(room));
+    
+  }),
   /** Messages Management */
   forwardMessage: action((state, packet) => {
     const { key, msg } = packet;
@@ -65,9 +76,11 @@ const model = {
       state.rooms[key].unreadMessages.push(msg);
   }),
   onReadMessages: action((state, roomKey) => {
-    const unreadMessages = state.rooms[roomKey].unreadMessages;
-    state.rooms[roomKey].readMessages.push(...unreadMessages);
-    state.rooms[roomKey].unreadMessages = [];
+    if (roomKey && state.rooms.hasOwnProperty(roomKey)) {
+      const unreadMessages = state.rooms[roomKey].unreadMessages;
+      state.rooms[roomKey].readMessages.push(...unreadMessages);
+      state.rooms[roomKey].unreadMessages = [];
+    }
   }),
   getUnreadMessages: computed(state => {
     return key => state.rooms[key].unreadMessages;

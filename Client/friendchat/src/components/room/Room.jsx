@@ -19,7 +19,6 @@ const Room = ({ roomKey, onCountUnread }) => {
   }, [readMessages]);
 
   useEffect(() => {
-    console.log("roomKey: " + roomKey, " count: " + unreadMessages.length);
     if(unreadMessages.length > 0)
       onCountUnread(roomKey, unreadMessages.length);
   }, [unreadMessages])
