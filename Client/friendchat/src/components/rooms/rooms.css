@@ -1,0 +1,15 @@
+.unread-badge {
+    margin-left: 5px;
+    background-color: red;
+    width: 0.3rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 5px ;
+}
+
+.badge-content {
+    text-align: middle;
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+    
+}

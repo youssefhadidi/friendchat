@@ -9,7 +9,29 @@ import Rooms from "./components/rooms/Rooms";
 
 function App() {  
   const user = useStoreState(state => state.user);
-  const { addRoom } = useStoreActions(actions => actions);
+  const rooms = useStoreState((state) => state.getRooms);
+  const { addRoom, forwardMessage } = useStoreActions(
+    (actions) => actions
+  );
+  const hasRoom = useStoreState((state) => state.hasRoom);
+
+  const handleCheckPacket = (packet) => {
+    const { sender, to: receiver } = packet;
+
+    if (receiver === "#public")
+      return forwardMessage({ key: receiver, msg: packet });
+
+    if (sender === user.username) {
+      if (hasRoom(receiver))
+        return forwardMessage({ key: receiver, msg: packet });
+
+      return addRoom({ key: receiver, roomId: receiver, msg: packet });
+    }
+
+    if (!hasRoom(sender)) {
+      return addRoom({ key: sender, roomId: sender, msg: packet });
+    } else forwardMessage({ key: sender, msg: packet });
+  };
 
   useEffect(() => {
     if (user && user.isInPublic)
@@ -28,7 +50,7 @@ function App() {
       </Col>
       <Col sm={9}>
         <div className="chat-section">
-          <Rooms />
+          <Rooms rooms={rooms} onCheckPacket={handleCheckPacket} />
         </div>
       </Col>
     </>

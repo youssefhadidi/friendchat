@@ -35,12 +35,16 @@ const model = {
     state.allUsers = payload;
   }),
   
+  /** Room Management */
   rooms: {},
   addRoom: action((state, { key, roomId, msg }) => {
-    state.rooms[key] = { roomId };
-    state.rooms[key].messages = [];
+    state.rooms[key] = {
+      roomId,
+      readMessages: [],
+      unreadMessages: []
+    }
     if (msg)
-      state.rooms[key].messages.push(msg);
+      state.rooms[key].unreadMessages.push(msg);
   }),
   getRooms: computed(state => Object.entries(state.rooms)),
   getRoom: computed(state => {
@@ -50,12 +54,27 @@ const model = {
     return key => state.rooms.hasOwnProperty(key);
   }),
   roomKeys: computed(state => Object.keys(state.rooms)),
-  forwardMessageToRoom: action((state, packet) => {
-    const { key, msg } = packet;
-    console.log("in forward method: ", packet)
-    state.rooms[key].messages.push(msg);
-  })
 
+  /** Messages Management */
+  forwardMessage: action((state, packet) => {
+    const { key, msg } = packet;
+    const { sender } = msg;
+    if (sender === state.user.username)
+      state.rooms[key].readMessages.push(msg);
+    else
+      state.rooms[key].unreadMessages.push(msg);
+  }),
+  onReadMessages: action((state, roomKey) => {
+    const unreadMessages = state.rooms[roomKey].unreadMessages;
+    state.rooms[roomKey].readMessages.push(...unreadMessages);
+    state.rooms[roomKey].unreadMessages = [];
+  }),
+  getUnreadMessages: computed(state => {
+    return key => state.rooms[key].unreadMessages;
+  }),
+  getReadMessages: computed(state => {
+    return key => state.rooms[key].readMessages;
+  })
 };
 
 export default model;

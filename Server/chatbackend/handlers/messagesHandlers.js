@@ -1,4 +1,4 @@
-const { getUser, getSocket } = require("./userHandlers");
+const {  getSocket } = require("./userHandlers");
 
 const messagesDelivery = (io, socket) => {  
     socket.on("chat_message", packet => {
