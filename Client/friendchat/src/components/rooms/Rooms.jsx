@@ -7,24 +7,27 @@ import { getMessage } from "../../services/messageServices";
 import Room from "../room/Room";
 
 const Rooms = ({ rooms, onCheckPacket }) => {
-  const { onReadMessages, storeRoomData, removeRoom } = useStoreActions(actions => actions);
+  const { onReadMessages, storeRoomData, removeRoom, setActiveRoom } = useStoreActions(actions => actions);
   const hasRoom = useStoreState(state => state.hasRoom);
+  const { activeRoom } = useStoreState(state => state);
   const [currentMessage, setCurrentMessage] = useState("");
-  const [newActiveKey, setNewActiveKey] = useState("");
   const [unreadCount, setUnreadCount] = useState({ });
 
   const handleCountUnreadMessages = (roomKey, count) => {
+    console.log("set unreadcount for " + roomKey + " count: " + count)
     const unreadCountList = { ...unreadCount };
     unreadCountList[roomKey] = count;
     setUnreadCount({ ...unreadCountList });
   }
 
   const handleSelectKey = eventKey => {
-    handleCountUnreadMessages(eventKey, 0);
-    setNewActiveKey(eventKey);
+    console.log("in handleSelectKey " + eventKey)
+    setActiveRoom(eventKey);
   }
 
   const handleCloseRoom = roomKey => {
+    if (activeRoom === roomKey)
+      setActiveRoom("#public");
     storeRoomData(roomKey); // temporrily store current room's data in localStorage
     removeRoom(roomKey); // remove current room
   }
@@ -38,33 +41,11 @@ const Rooms = ({ rooms, onCheckPacket }) => {
       onCheckPacket(currentMessage);
   }, [currentMessage])
 
-  useEffect(() => {
-    /**new tab opens automatically only if the chat is launched by user*/
-    if (rooms.length > 0) {
-      const newRoom = rooms[rooms.length - 1];
-      if (
-        newRoom[1].readMessages.length === 0 &&
-        newRoom[1].unreadMessages.length === 0
-      ) {
-        setNewActiveKey(newRoom[0]);
-      }
-
-      if (!hasRoom(newActiveKey))
-        handleSelectKey("#public");
-    }
-  }, [rooms]);
-
-  useEffect(() => {
-    /** when a tab is selected, all unread messages of the given room are moved to readMessages so they can be displayed in chatbox*/
-    if(newActiveKey)
-      onReadMessages(newActiveKey);
-  }, [newActiveKey, currentMessage])
-
   const renderTabTitle = tabKey => {
     return (
       <>
         {tabKey}
-        {(unreadCount[tabKey] > 0) && (
+        {(unreadCount[tabKey] > 0 && activeRoom !== tabKey) && (
           <span className="unread-badge">
             <span className="badge-content">{unreadCount[tabKey]}</span>
           </span>
@@ -80,7 +61,7 @@ const Rooms = ({ rooms, onCheckPacket }) => {
     <>
       <Tabs
         className="mb-3 tabs bg-light"
-        activeKey={newActiveKey}
+        activeKey={activeRoom}
         onSelect={(eventKey) => handleSelectKey(eventKey)}
       >
         {rooms.map(([key], index) => (

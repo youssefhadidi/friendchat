@@ -6,7 +6,7 @@ import { getAllUsers } from '../../services/userServices';
 
 const Users = () => {
   const { allUsers: users } = useStoreState(state => state);
-  const {setAllUsers, addRoom} = useStoreActions(actions => actions);
+  const { setAllUsers, addRoom } = useStoreActions(actions => actions);
 
   useEffect(() => {
     getAllUsers(setAllUsers);

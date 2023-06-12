@@ -4,7 +4,8 @@ import ChatBox from "../chatbox/ChatBox";
 import { sendMessage } from "../../services/messageServices";
 
 const Room = ({ roomKey, onCountUnread }) => {
-  const { user } = useStoreState((state) => state);
+  const { user, activeRoom } = useStoreState((state) => state);
+  const { onReadMessages, setActiveRoom } = useStoreActions(actions => actions);
   const readMessages = useStoreState((state) => state.getReadMessages(roomKey));
   const unreadMessages = useStoreState(state => state.getUnreadMessages(roomKey));
   
@@ -19,11 +20,16 @@ const Room = ({ roomKey, onCountUnread }) => {
   }, [readMessages]);
 
   useEffect(() => {
-    if(unreadMessages.length > 0)
-      onCountUnread(roomKey, unreadMessages.length);
-  }, [unreadMessages])
+    if (activeRoom === roomKey) {
+      if (unreadMessages.length > 0) {
+        onReadMessages(roomKey);
+        onCountUnread(roomKey, 0);
+        console.log("in room " + roomKey)
+      }        
+    } else onCountUnread(roomKey, unreadMessages.length);
+      
+  }, [unreadMessages, activeRoom])
 
-  //return ;
   return ( <ChatBox messages={messages} onSendMessage={handleSendMessage} />);
 };
 
