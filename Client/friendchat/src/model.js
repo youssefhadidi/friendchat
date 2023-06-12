@@ -47,7 +47,6 @@ const model = {
     }
     if (msg) 
        state.rooms[key].unreadMessages.push(msg);
-    
     else state.activeRoom = key;
   }),
   updateRoom: action((state, {roomKey, roomData}) => {

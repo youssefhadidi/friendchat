@@ -41,6 +41,10 @@ const Rooms = ({ rooms, onCheckPacket }) => {
       onCheckPacket(currentMessage);
   }, [currentMessage])
 
+  useEffect(() => {
+    handleCountUnreadMessages(activeRoom, 0);
+  }, [activeRoom])
+
   const renderTabTitle = tabKey => {
     return (
       <>

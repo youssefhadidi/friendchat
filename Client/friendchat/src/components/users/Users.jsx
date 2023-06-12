@@ -6,7 +6,16 @@ import { getAllUsers } from '../../services/userServices';
 
 const Users = () => {
   const { allUsers: users } = useStoreState(state => state);
-  const { setAllUsers, addRoom } = useStoreActions(actions => actions);
+  const hasRoom = useStoreState(state => state.hasRoom);
+  const { setAllUsers, addRoom, setActiveRoom } = useStoreActions(actions => actions);
+
+  const handleSelectUser = user => {
+    if (hasRoom(user.username)) {
+      setActiveRoom(user.username);
+      return;
+    }
+    addRoom({ key: user.username, roomId: user.username });   
+  }
 
   useEffect(() => {
     getAllUsers(setAllUsers);
@@ -15,7 +24,7 @@ const Users = () => {
   return (
     <ul className="users scroll rounded-top bg-white">
       {users.map((user, index) => (
-        <li key={index} onClick={() => addRoom({key: user.username, roomId: user.username})}>
+        <li key={index} onClick={() => handleSelectUser(user)}>
           <i
             className={"fa fa-circle status " + user.status}
             aria-hidden="true"
