@@ -40,17 +40,25 @@ const model = {
   /** Room Management */
   rooms: {},
   addRoom: action((state, { key, roomId, msg }) => {
-    state.rooms[key] = {
-      roomId,
-      readMessages: [],
-      unreadMessages: []
+    if (localStorage.getItem(key)) {
+      const cachedRoomData = JSON.parse(localStorage.getItem(key));
+      state.rooms[key] = cachedRoomData;
+      localStorage.removeItem(key);
+    } else {
+      state.rooms[key] = {
+        roomId,
+        readMessages: [],
+        unreadMessages: [],
+      };
     }
+    
     if (msg) 
        state.rooms[key].unreadMessages.push(msg);
     else state.activeRoom = key;
   }),
   updateRoom: action((state, {roomKey, roomData}) => {
     state.rooms[roomKey] = roomData;
+    state.activeRoom = roomKey;
   }),
   getRooms: computed(state => Object.entries(state.rooms)),
   getRoom: computed(state => {
