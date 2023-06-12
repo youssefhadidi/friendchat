@@ -14,7 +14,6 @@ const Rooms = ({ rooms, onCheckPacket }) => {
   const [unreadCount, setUnreadCount] = useState({ });
 
   const handleCountUnreadMessages = (roomKey, count) => {
-    console.log("set unreadcount for " + roomKey + " count: " + count)
     const unreadCountList = { ...unreadCount };
     unreadCountList[roomKey] = count;
     setUnreadCount({ ...unreadCountList });

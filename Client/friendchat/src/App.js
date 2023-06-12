@@ -34,9 +34,8 @@ function App() {
   };
 
   useEffect(() => {
-    if (user && user.isInPublic)
-      addRoom({ key: "#public", roomId: "#public" });
-  }, [user])
+    addRoom({ key: "#public", roomId: "#public" });
+  }, [])
 
   if (!user) return <Login />;
 

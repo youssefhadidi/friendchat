@@ -24,7 +24,6 @@ const Room = ({ roomKey, onCountUnread }) => {
       if (unreadMessages.length > 0) {
         onReadMessages(roomKey);
         onCountUnread(roomKey, 0);
-        console.log("in room " + roomKey)
       }        
     } else onCountUnread(roomKey, unreadMessages.length);
       
