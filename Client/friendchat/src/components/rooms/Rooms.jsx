@@ -7,11 +7,11 @@ import { getMessage } from "../../services/messageServices";
 import Room from "../room/Room";
 
 const Rooms = ({ rooms, onCheckPacket }) => {
-  const { onReadMessages, storeRoomData, removeRoom, setActiveRoom } = useStoreActions(actions => actions);
-  const hasRoom = useStoreState(state => state.hasRoom);
+  const { storeRoomData, removeRoom, setActiveRoom } = useStoreActions(actions => actions);
   const { activeRoom } = useStoreState(state => state);
   const [currentMessage, setCurrentMessage] = useState("");
-  const [unreadCount, setUnreadCount] = useState({ });
+  const [unreadCount, setUnreadCount] = useState({});
+  const [observers, setObserver] = useState([]);
 
   const handleCountUnreadMessages = (roomKey, count) => {
     const unreadCountList = { ...unreadCount };
@@ -20,7 +20,6 @@ const Rooms = ({ rooms, onCheckPacket }) => {
   }
 
   const handleSelectKey = eventKey => {
-    console.log("in handleSelectKey " + eventKey)
     setActiveRoom(eventKey);
   }
 
@@ -43,6 +42,24 @@ const Rooms = ({ rooms, onCheckPacket }) => {
   useEffect(() => {
     handleCountUnreadMessages(activeRoom, 0);
   }, [activeRoom])
+
+  useEffect(() => {
+    const chatWindows = document.getElementsByClassName("chat-window");
+    
+    if (chatWindows.length > 0) {
+      const chatWindow = chatWindows[chatWindows.length - 1];
+      const observer = new MutationObserver(mutationsList => {
+        for (let mutation of mutationsList)
+          if (mutation.type === "childList")
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+      });
+
+      observer.observe(chatWindow, {childList: true})
+
+      setObserver([...observers, observer]);
+    }
+
+  }, [rooms])
 
   const renderTabTitle = tabKey => {
     return (
@@ -68,8 +85,18 @@ const Rooms = ({ rooms, onCheckPacket }) => {
         onSelect={(eventKey) => handleSelectKey(eventKey)}
       >
         {rooms.map(([key], index) => (
-          <Tab eventKey={key} title={renderTabTitle(key)} key={index} className="tab-key">
-            <Room roomKey={key} key={index} onCountUnread={ handleCountUnreadMessages } />
+          <Tab
+            eventKey={key}
+            title={renderTabTitle(key)}
+            key={index}
+            className="tab-key"
+          >
+            <Room
+              roomKey={key}
+              key={index}
+              onCountUnread={handleCountUnreadMessages}
+              observer={observers[observers.length - 1]}
+            />
           </Tab>
         ))}
       </Tabs>

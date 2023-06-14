@@ -25,7 +25,6 @@ export const getFile = async () => {
 
 const checkFileSize = (file) => {
   const sizeLimit = 1024 * 1024;
-  console.log(file.size)
   if (file.size > sizeLimit) {
     alert("Image must not exceed 1MB");
     return;

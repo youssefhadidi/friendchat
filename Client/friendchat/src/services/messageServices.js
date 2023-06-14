@@ -6,7 +6,6 @@ export const sendMessage = msg => {
 
 export const getMessage = callback => {
     socket.on("chat_message", msg => {
-        console.log(msg)
         callback(msg);
     })
 }

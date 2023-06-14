@@ -1,10 +1,16 @@
 import { useStoreState } from "easy-peasy";
 import "./message.css";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import ListGroup from "react-bootstrap/esm/ListGroup";
 
-function Message({ sender, payload }) {
+function Message({ sender, payload, onCheckSender }) {
   const { user } = useStoreState(state => state);
+  const [renderSender, setRenderSender] = useState(true);
+
+  useEffect(() => {
+    setRenderSender(!onCheckSender());
+  }, [])
+
   const renderMessage = () => {
     const { type, data } = payload;
 
@@ -19,8 +25,8 @@ function Message({ sender, payload }) {
       as="li"
       className="d-flex justify-content-between align-items-start"
     >
-      <div className="ms-2 me-auto">
-        <div className="fw-bold">{sender}</div>
+      <div className="ms-2 me-auto ">
+        {renderSender && <div className="fw-bold">{sender}</div>}
         {renderMessage()}
       </div>
     </ListGroup.Item>
