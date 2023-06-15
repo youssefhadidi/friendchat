@@ -20,15 +20,19 @@ function Message({ sender, payload, onCheckSender }) {
     
     return payload.data;
   }
+
+  const msgClassName =
+    user.username === sender ? "ms-2 ms-auto bubble bubble-right" : "ms-2 me-auto bubble bubble-left";
+  
   return (
     <ListGroup.Item
       as="li"
-      className="d-flex justify-content-between align-items-start"
+      className="d-flex flex-column justify-content-between align-items-start"
     >
-      <div className="ms-2 me-auto ">
-        {renderSender && <div className="fw-bold">{sender}</div>}
-        {renderMessage()}
-      </div>
+      {renderSender && user.username !== sender && (
+        <div className="fw-bold ms-2 mb-2">{sender}</div>
+      )}
+      <div className={msgClassName}>{renderMessage()}</div>
     </ListGroup.Item>
   );
 }
