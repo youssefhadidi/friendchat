@@ -1,4 +1,4 @@
-const parseDataUrl = require("parse-data-url");
+/*const parseDataUrl = require("parse-data-url");
 const fs = require("fs");
 const sharp = require('sharp');
 
@@ -64,5 +64,5 @@ const imageResizingProcess = async payload => {
     return `data:${payload.type};base64,${newDataUrl}`;
 }
 
-module.exports = { imageResizingProcess, removeFile };
+module.exports = { imageResizingProcess, removeFile };*/
 
