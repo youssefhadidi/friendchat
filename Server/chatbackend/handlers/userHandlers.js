@@ -1,75 +1,72 @@
-const express = require("express");
-const User = require("./User");
-const router = express.Router();
+const { User } = require("../models/user");
 
-const users = {};
 const sockets = {};
 
-router.post('/', (req, res) => {
-    const error = validateUser(req.body);
-    if (error) return res.status(400).send(error);
+/**socket = {...
+ *            data: {
+ *              user: {
+ *                _id: String,  
+ * }}} */
 
-    const user = new User(req.body.username);
-    users[req.body.username.toLowerCase()] = user;
-    res.send(user);
-})
-
-const validateUser = user => {
-    const regexPattern = /^[A-Za-z0-9]/;
-
-    const valid = regexPattern.test(user.username);
-    if (!valid) return "Invalid Username";
-
-
-    if (users[user.username.toLowerCase()])
-        return "Username already exists";
-    
-    return null;
-}
-
-const registerUserHandlers = (io, socket) => {
-  
-  socket.on("user_login", user => {
+const userLoginHandlers = (io, socket) => {
+  socket.on("user_login", async () => {
     /** user = {username: String, id: Number, isInPublic: boolean} */
-
-    socket.data.username = user.username.toLowerCase();
-    socket.data.userId = user.id;
-
-    /** add current socket to sockets, using user's id as its key */
-    sockets[user.username] = socket;
     
-    if(user.isInPublic)
-      socket.join("#public");
+    const userId = socket.data.user._id;
+    const user = await User.findById(userId); // find user with provided id in db
 
-    const usersData = Object.values(users);
-    io.to('#public').emit("all_users", usersData);
+    socket.data.user.username = user.username.toLowerCase();
+
+    /** add current socket to sockets, using user's name as its key */
+    sockets[user.username] = socket;
+
+    if (user.isInPublic) socket.join("#public");
+
+    const users = await User.find({
+      status: { $in: ["online", "idle", "busy"] },
+    }).sort("name");
       
-    });
+    io.to("#public").emit("all_users", users);
+  });
 
-    socket.on("disconnect", () => {
-      delete users[socket.data.username];
-      const usersData = Object.values(users);
+  socket.on("disconnect", async () => {
+    const userId = socket.data.user._id;
+    /**For Notification */
+    const disconnectedUser = await User.findByIdAndUpdate(
+      userId,
+      { status: "disconnected" },
+      { new: true }
+    );
 
-      io.emit("all_users", usersData);
-      console.log("user disconnect");
-    });
-}
+    const users = await User.find({
+      status: { $in: ["online", "idle", "busy"] },
+    }).sort("name");
 
-const updateUserData = (io, socket) => {
-  socket.on("update_status", status => {
-    const user = users[socket.data.username];
-    user.status = status;
-    const usersData = Object.values(users);
-    io.emit("all_users", usersData);
-  })
-}
+    io.emit("all_users", users);
+    console.log(disconnectedUser.username + " disconnect");
+  });
+};
 
-const getUser = username => {
-  return users[username];
-}
+const updateUserHandlers = (io, socket) => {
+    socket.on("update_status", async (status) => {
+    const userId = socket.data.user._id;
+    /**For Notification */
+    const updatedUser = await User.findByIdAndUpdate(userId, { status }, { new: true });
+      
+    const users = await User.find({
+      status: { $in: ["online", "idle", "busy"] },
+    }).sort("name");
+        
+    io.emit("all_users", users);
+  });
+};
 
-const getSocket = username => {
+const getSocket = (username) => {
   return sockets[username];
-}
+};
 
-module.exports = {userRouter: router, registerUserHandlers, updateUserData, getUser, getSocket};
+module.exports = {
+  userLoginHandlers,
+  updateUserHandlers,
+  getSocket,
+};

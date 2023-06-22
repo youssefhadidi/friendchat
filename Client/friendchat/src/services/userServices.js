@@ -1,10 +1,10 @@
 import socket from './socket';
 import http from "./httpServices";
 
-const apiEndpoint = "http://localhost:4000/api/users";
+const apiEndpoint = "http://localhost:4000/api";
 
 export const register = user => {
-    return http.post(apiEndpoint, user);
+    return http.post(`${apiEndpoint}/users/register`, user);
 }
 
 // Client-side username validation

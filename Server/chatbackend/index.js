@@ -6,7 +6,10 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const mongoose = require('mongoose');
 const config = require("config");
-const { userRouter, registerUserHandlers, updateUserData } = require("./handlers/userHandlers");
+const jwt = require("jsonwebtoken");
+const user = require('./routes/user');
+const auth = require('./routes/auth');
+const { userLoginHandlers, updateUserHandlers } = require("./handlers/userHandlers");
 const { messagesDelivery } = require('./handlers/messagesHandlers');
 
 if (!config.get("jwtPrivateKey")) {
@@ -26,13 +29,34 @@ const io = new Server(server, { cors: { origin: '*' } });
 
 app.use(express.json());
 app.use(cors());
+app.use('/api/user', user);
+app.use('/api/auth', auth);
 
-app.use('/api/users', userRouter)
+/**Auth Middleware*/
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    next(new Error("Access Denied. No Token Provided"));
+  };
+
+  let decoded;
+  try {
+    decoded = jwt.verify(token, config.get("jwtPrivateKey"));
+  } catch (error) {
+    next(new Error("Access Denied. Invalid Token"));
+  }
+
+  if (!decoded.isAuthorized)
+    next(new Error("Access is Denied."));
+  
+  socket.data.user._id = decoded._id;
+  next();
+});
 
 io.on('connection', socket => {
   
-  registerUserHandlers(io, socket);
-  updateUserData(io, socket);
+  userLoginHandlers(io, socket);
+  updateUserHandlers(io, socket);
   messagesDelivery(io, socket);
 
 });
