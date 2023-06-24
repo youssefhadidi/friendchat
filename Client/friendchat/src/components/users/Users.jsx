@@ -2,7 +2,7 @@
 import "./users.css";
 import { useEffect } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { getAllUsers } from '../../services/userServices';
+import UserService from '../../services/userServices';
 
 const Users = () => {
   const { allUsers: users } = useStoreState(state => state);
@@ -18,7 +18,7 @@ const Users = () => {
   }
 
   useEffect(() => {
-    getAllUsers(setAllUsers);
+    UserService.getAllUsers(setAllUsers);
   }, [users]);
 
   return (

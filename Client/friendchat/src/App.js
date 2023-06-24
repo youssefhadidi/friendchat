@@ -1,13 +1,14 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { useStoreState, useStoreActions } from "easy-peasy";
+import { useStoreState, useStoreActions, useStoreRehydrated } from "easy-peasy";
 import Col from "react-bootstrap/Col";
-import Login from "./components/login/login";
+import Auth from "./components/auth/Auth";
 import Users from "./components/users/Users";
 import Profile from "./components/profile/Profile";
 import Rooms from "./components/rooms/Rooms";
 
 function App() {  
+  const isRehydrated = useStoreRehydrated();
   const user = useStoreState(state => state.user);
   const rooms = useStoreState((state) => state.getRooms);
   const { addRoom, forwardMessage } = useStoreActions(
@@ -37,7 +38,8 @@ function App() {
     addRoom({ key: "#public", roomId: "#public" });
   }, [])
 
-  if (!user) return <Login />;
+  if (!isRehydrated) return <div>Loading...</div>
+  if (!user) return <Auth />;
 
   return (
     <>
@@ -62,3 +64,5 @@ export default App;
      payload: {type: String,
                data: String},
      roomId: "#public" }*/
+
+     // abcd1234

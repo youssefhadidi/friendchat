@@ -3,9 +3,10 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import "./login.css";
 import { useState, useEffect } from "react";
+import  UserService from "../../services/userServices";
 import Joi from 'joi';
 
-const Login = ({validate, validateProperty, onLogin, user}) => {
+const Login = ({ validate, validateProperty, onLogin, user, registerToken }) => {
   /*const [username, setUsername] = useState("");
   const {onLogin, setLoginError} = useStoreActions(actions => actions); 
   const loginError = useStoreState(state => state.loginError);*/
@@ -13,18 +14,21 @@ const Login = ({validate, validateProperty, onLogin, user}) => {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
 
-  const schema = Joi.object({
-    email: Joi.string().email().min(5).max(50).required(),
+  const schema = {
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .min(5)
+      .max(50)
+      .required(),
     password: Joi.string().min(8).max(255).required(),
-  });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Client-side validation
-    const errors = validate(schema);
+    const errors = validate(userData, schema);
     if (errors) return setErrors(errors);
 
-    const registerToken = sessionStorage.getItem("register-token");
     onLogin(userData, registerToken);
 
   };
@@ -43,10 +47,11 @@ const Login = ({validate, validateProperty, onLogin, user}) => {
     setErrors(inputErrors);
   };
 
+
   if (user) return (
     <div>
       <h2>Hello, {user.username}!</h2>
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" onClick={() => UserService.connectUser(user)}>
         Join Chat
       </Button>
     </div>
@@ -54,25 +59,28 @@ const Login = ({validate, validateProperty, onLogin, user}) => {
 
   return (
     <Form className="login" onSubmit={(e) => handleSubmit(e)}>
-      <Form.Group className="mb-3" controlId="login">
+      <h2>Log In</h2>
+      <Form.Group className="mt-3" controlId="email">
         <Form.Label>Email</Form.Label>
         <Form.Control
           className="shadow-none"
           type="text"
-          name="email"
           value={userData.email}
+          name="email"
           onChange={(e) => handleChange(e)}
         />
-        {errors.password && (
-          <Alert variant="secondary error-message">{errors.password}</Alert>
+        {errors.email && (
+          <Alert variant="secondary error-message">{errors.email}</Alert>
         )}
+      </Form.Group>
 
+      <Form.Group className="mt-3" controlId="password">
         <Form.Label>Password</Form.Label>
         <Form.Control
           className="shadow-none"
           type="password"
-          name="password"
           value={userData.password}
+          name="password"
           onChange={(e) => handleChange(e)}
         />
       </Form.Group>
@@ -80,7 +88,11 @@ const Login = ({validate, validateProperty, onLogin, user}) => {
         <Alert variant="secondary error-message">{errors.password}</Alert>
       )}
 
-      <Button variant="primary" type="submit" disabled={validate()}>
+      <Button
+        variant="primary mt-3"
+        type="submit"
+        disabled={validate(userData, schema)}
+      >
         Join Chat
       </Button>
     </Form>

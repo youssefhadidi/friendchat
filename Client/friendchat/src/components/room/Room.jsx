@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import ChatBox from "../chatbox/ChatBox";
-import { sendMessage } from "../../services/messageServices";
+import MessageService from "../../services/messageServices";
 
 const Room = ({ roomKey, onCountUnread, observer }) => {
   const { user, activeRoom } = useStoreState((state) => state);
@@ -12,7 +12,7 @@ const Room = ({ roomKey, onCountUnread, observer }) => {
   const [messages, setMessages] = useState([]);
 
   const handleSendMessage = (msg) => {
-    sendMessage({ sender: user.username, to: roomKey, ...msg });
+    MessageService.sendMessage({ sender: user.username, to: roomKey, ...msg });
   };
 
   useEffect(() => {

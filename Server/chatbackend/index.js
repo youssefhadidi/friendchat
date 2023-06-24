@@ -52,13 +52,13 @@ io.use((socket, next) => {
 
   if (!decoded.isAuthorized)
     next(new Error("Access is Denied."));
-  
-  socket.data.user._id = decoded._id;
+
+  socket.user = { _id: decoded._id }
   next();
 });
 
 io.on('connection', socket => {
-  
+  console.log("a user connects")
   userLoginHandlers(io, socket);
   updateUserHandlers(io, socket);
   messagesDelivery(io, socket);

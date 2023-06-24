@@ -1,12 +1,25 @@
-import socket from './socket';
+import Socket from './socket';
 
-export const sendMessage = msg => {
-    socket.volatile.emit("chat_message", msg);
-}
+class MessageService {
+  static ioSocket = Socket;
+  static socket;
 
-export const getMessage = callback => {
-    socket.on("chat_message", msg => {
+  static update = () => {
+    this.socket = this.ioSocket.get();
+    console.log("update in messageService is called, socket: ");
+    console.log(this.socket);
+  };
+
+  static sendMessage = msg => {
+    this.socket.volatile.emit("chat_message", msg);
+  }
+
+  static getMessage = callback => {
+    this.socket.on("chat_message", msg => {
         callback(msg);
     })
+  }
 }
+
+export default MessageService;
 

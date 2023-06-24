@@ -3,7 +3,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import React, { useEffect, useState } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { getMessage } from "../../services/messageServices";
+import MessageService from "../../services/messageServices";
 import Room from "../room/Room";
 
 const Rooms = ({ rooms, onCheckPacket }) => {
@@ -31,7 +31,7 @@ const Rooms = ({ rooms, onCheckPacket }) => {
   }
 
   useEffect(() => {
-    getMessage(setCurrentMessage);
+    MessageService.getMessage(setCurrentMessage);
   }, [])
 
   useEffect(() => {

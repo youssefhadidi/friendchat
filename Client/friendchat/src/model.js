@@ -1,10 +1,5 @@
 import { action, thunk, computed } from "easy-peasy";
-import {
-  connectUser,
-  registerUser,
-  updateUserStatus,
-
-} from "./services/userServices";
+import UserService from "./services/userServices";
 
 const model = {
   /**User data management */
@@ -14,7 +9,7 @@ const model = {
   }),
   setUserStatus: action((state, status) => {
     state.user.status = status; 
-    updateUserStatus(status);
+    UserService.updateUserStatus(status);
   }),
 
   /**Login/User registration */
