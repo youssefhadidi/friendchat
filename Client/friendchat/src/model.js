@@ -1,7 +1,7 @@
 import { action, thunk, computed } from "easy-peasy";
 import {
   connectUser,
-  register,
+  registerUser,
   updateUserStatus,
 
 } from "./services/userServices";
@@ -18,19 +18,19 @@ const model = {
   }),
 
   /**Login/User registration */
-  loginError: "",
+  /*loginError: "",
   setLoginError: action((state, error) => {
     state.loginError = error;
   }),
   onLogin: thunk(async (actions, payload) => {
     try {
-      const { data: user } = await register(payload);
+      const { data: user } = await registerUser(payload);
       actions.setUser(user);
       connectUser(user);
     } catch (error) {
       actions.setLoginError(error.response.data);
     }
-  }),
+  }),*/
 
   allUsers: [],
   setAllUsers: action((state, payload) => {

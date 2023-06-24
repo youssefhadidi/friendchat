@@ -27,8 +27,12 @@ mongoose
 
 const io = new Server(server, { cors: { origin: '*' } });
 
+const corsOptions = {
+  exposedHeaders: "x-auth-token",
+};
+
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use('/api/user', user);
 app.use('/api/auth', auth);
 

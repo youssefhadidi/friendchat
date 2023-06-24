@@ -3,8 +3,16 @@ import http from "./httpServices";
 
 const apiEndpoint = "http://localhost:4000/api";
 
-export const register = user => {
-    return http.post(`${apiEndpoint}/users/register`, user);
+export const registerUser = userData => {
+    return http.post(`${apiEndpoint}/user/register`, userData);
+}
+
+export const loginUser = (userData, registerToken) => {
+    return http.post(`${apiEndpoint}/auth`, userData, {
+        headers: {
+            "x-auth-token": registerToken
+        }
+    });
 }
 
 // Client-side username validation
