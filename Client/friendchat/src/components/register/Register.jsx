@@ -4,7 +4,6 @@ import Alert from "react-bootstrap/Alert";
 import "./register.css";
 import { useState, useEffect } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
-import { validateOnRegister, validateField } from "../../services/userServices";
 import Joi from "joi";
 
 const Register = ({onRegister, validate, validateProperty}) => {

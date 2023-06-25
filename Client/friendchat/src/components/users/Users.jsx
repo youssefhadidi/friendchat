@@ -19,6 +19,7 @@ const Users = () => {
 
   useEffect(() => {
     UserService.getAllUsers(setAllUsers);
+    
   }, [users]);
 
   return (

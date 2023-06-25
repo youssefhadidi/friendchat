@@ -49,9 +49,9 @@ const Login = ({ validate, validateProperty, onLogin, user, registerToken }) => 
 
 
   if (user) return (
-    <div>
+    <div className="login ">
       <h2>Hello, {user.username}!</h2>
-      <Button variant="primary" type="submit" onClick={() => UserService.connectUser(user)}>
+      <Button variant="primary" type="submit" onClick={() => onLogin(user)}>
         Join Chat
       </Button>
     </div>

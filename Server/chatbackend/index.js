@@ -58,7 +58,8 @@ io.use((socket, next) => {
 });
 
 io.on('connection', socket => {
-  console.log("a user connects")
+  io.to(socket.id).emit("socket_connected");
+
   userLoginHandlers(io, socket);
   updateUserHandlers(io, socket);
   messagesDelivery(io, socket);

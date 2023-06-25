@@ -12,32 +12,40 @@ const connectSocket = authToken => {
     });
 }*/
 
+
 class Socket {
-    static socket;
-    static handlers = [];
-    
-    static connectSocket = (authToken) => {
-        this.socket = io(URL, {
-            auth: {
-            token: authToken,
-            },
-        });
+  static socket; /**Singleton Pattern*/
+  static handlers = [];
 
-        this.notify();
-    };
+  static connectSocket = (authToken) => {
+    this.socket = io(URL, {
+      auth: {
+        token: authToken,
+      },
+    });
 
-    static addHandler = handler => {
-        console.log("handler: " + handler);
-        this.handlers[this.handlers.length++] = handler; 
+    this.notify();
+  };
+
+  /**Observer Pattern */
+  static addHandler = (handler) => {
+    this.handlers[this.handlers.length++] = handler;
+  };
+
+  static notify() {
+    for (let i = 0; i < this.handlers.length; i++) {
+      this.handlers[i].update();
     }
+  }
 
-    static notify() {
-        for (let i = 0; i < this.handlers.length; i++) {
-            this.handlers[i].update();
-        } 
-    }
+  static get = () => this.socket;
 
-    static get = () => this.socket;
+  static getStatus = callBack => {
+    this.socket.on("socket_connected", () => {
+
+      callBack(true);
+    });
+  }
 }
 
 export default Socket;

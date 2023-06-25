@@ -3,11 +3,13 @@ const { User } = require("../models/user");
 const sockets = {};
 
 const userLoginHandlers = (io, socket) => {
-  socket.on("user_login", async () => {
+  socket.on("user_login", async (userData) => {
     /** user = {username: String, id: Number, isInPublic: boolean} */
-    
+    console.log("a user login")
     const userId = socket.user._id;
     const user = await User.findById(userId); // find user with provided id in db
+    user.status = userData.status;
+    await user.save();
 
     socket.user.username = user.username.toLowerCase();
 
@@ -36,6 +38,7 @@ const userLoginHandlers = (io, socket) => {
       status: { $in: ["online", "idle", "busy"] },
     }).sort("name");
 
+    delete sockets[disconnectedUser.username];
     io.emit("all_users", users);
     console.log("a user disconnect");
   });

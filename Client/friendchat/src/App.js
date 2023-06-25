@@ -6,6 +6,7 @@ import Auth from "./components/auth/Auth";
 import Users from "./components/users/Users";
 import Profile from "./components/profile/Profile";
 import Rooms from "./components/rooms/Rooms";
+import UserService from "./services/userServices";
 
 function App() {  
   const isRehydrated = useStoreRehydrated();
@@ -36,7 +37,13 @@ function App() {
 
   useEffect(() => {
     addRoom({ key: "#public", roomId: "#public" });
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      UserService.connectUser(user);
+    }
+  }, [user]);
 
   if (!isRehydrated) return <div>Loading...</div>
   if (!user) return <Auth />;

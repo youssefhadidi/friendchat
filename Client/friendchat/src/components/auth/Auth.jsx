@@ -3,7 +3,6 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 import { useState, useEffect } from 'react';
 import Login from '../login/login';
 import Register from '../register/Register';
-//import { registerUser, loginUser, connectUser } from '../../services/userServices';
 import UserService from '../../services/userServices';
 import Socket from "../../services/socket";
 import Joi from 'joi';
@@ -11,6 +10,7 @@ import Joi from 'joi';
 const Auth = () => {
     const { user } = useStoreState(state => state);
     const { setUser } = useStoreActions(actions => actions);
+    const [userData, setUserData] = useState();
     const [tokens, setTokens] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -41,14 +41,16 @@ const Auth = () => {
         try {
             const response = await UserService.loginUser(userData, registerToken);
             const authToken = response.headers["x-auth-token"];
+
             sessionStorage.setItem("authToken", authToken);
+            sessionStorage.setItem("registerToken", registerToken);
+
             const user = response.data;
             
-            setTokens({ ...tokens, authToken: authToken });
-            setUser(user);
-            
+            setTokens({ ...tokens, authToken: authToken, registerToken: registerToken });
+            setUserData(user);
+
             Socket.connectSocket(authToken);
-            UserService.connectUser(user)
         } catch (error) {
             const loginError = { ...errors };
             loginError.message = error.message;
@@ -61,9 +63,6 @@ const Auth = () => {
     const handleRegister = async userData => {
         try {
             const { data: registerToken } = await UserService.registerUser(userData);
-            sessionStorage.setItem("registerToken", registerToken);
-
-            setTokens({ ...tokens, registerToken: registerToken });
             handleLogin({ email: userData.email, password: userData.password }, registerToken);
         } catch (error) {
             const registerError = { ...errors };
@@ -71,6 +70,11 @@ const Auth = () => {
 
             setErrors(registerError);
         }
+    }
+
+    const handleLoginWithAuth = userData => {
+        setUser(userData);
+        UserService.connectUser(userData);
     }
 
     useEffect(() => {
@@ -96,8 +100,8 @@ const Auth = () => {
       <Login
         validate={validate}
         validateProperty={validateProperty}
-        onLogin={handleLogin}
-        user={user}
+        onLogin={(userData && tokens.authToken )? handleLoginWithAuth : handleLogin}
+        user={userData}
         registerToken={tokens.registerToken}
       />
     );

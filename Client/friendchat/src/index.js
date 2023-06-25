@@ -5,13 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import Root from "./components/Root";
 import { createStore, StoreProvider, persist } from "easy-peasy";
-import Socket from "./services/socket";
-import UserService from "./services/userServices";
-import MessageService from "./services/messageServices";
 import model from "./model";
-
-Socket.addHandler(UserService);
-Socket.addHandler(MessageService);
 
 const store = createStore(persist(model, { allow: ["user"] }));
 

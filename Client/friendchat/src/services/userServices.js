@@ -13,45 +13,46 @@ Socket.addHandler(handleGetSocket);
 console.log("socket ", socket);*/
 
 class UserService {
-    static ioSocket = Socket;
-    static socket;
+  static ioSocket = Socket;
+  static socket;
 
-    static update = () => {
-        this.socket = this.ioSocket.get();
-        console.log("update is called, socket: ");
-        console.log(this.socket);
-    }
-    
-    static registerUser = userData => {
-        return http.post(`${apiEndpoint}/user/register`, userData);
-    }
+  /**Observer Pattern */
+  static update = () => {
+    this.socket = this.ioSocket.get();
+  };
 
-    static loginUser = (userData, registerToken) => {
-        return http.post(`${apiEndpoint}/auth`, userData, {
-            headers: {
-                "x-auth-token": registerToken
-            }
-        });
-    }
+  static registerUser = (userData) => {
+    return http.post(`${apiEndpoint}/user/register`, userData);
+  };
 
-    static connectUser = user => {
-        this.socket.volatile.emit("user_login", user);
-    }
+  static loginUser = (userData, registerToken) => {
+    return http.post(`${apiEndpoint}/auth`, userData, {
+      headers: {
+        "x-auth-token": registerToken,
+      },
+    });
+  };
 
-    static disconnect = () => {
-        this.socket.disconnect();
-    }
+  static connectUser = (user) => {
+    /*if (this.socket.connected)
+      console.log("socket connected")
+    else console.log("not connected yet")*/
+    this.socket.volatile.emit("user_login", user);
+  };
 
-    static getAllUsers = setAllUsers => {
-        console.log("socket " + this.socket);
-        this.socket.on("all_users", users => {
-            setAllUsers(users);
-        })
-    }
+  static disconnect = () => {
+    this.socket.disconnect();
+  };
 
-    static updateUserStatus = status => {
-        this.socket.emit("update_status", status);
-    }
+  static getAllUsers = (setAllUsers) => {
+    this.socket.on("all_users", (users) => {
+      setAllUsers(users);
+    });
+  };
+
+  static updateUserStatus = (status) => {
+    this.socket.emit("update_status", status);
+  };
 }
 
 export default UserService;

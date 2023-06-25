@@ -3,11 +3,10 @@ import Socket from './socket';
 class MessageService {
   static ioSocket = Socket;
   static socket;
-
+  
+  /**Observer Pattern */
   static update = () => {
     this.socket = this.ioSocket.get();
-    console.log("update in messageService is called, socket: ");
-    console.log(this.socket);
   };
 
   static sendMessage = msg => {
