@@ -3,7 +3,6 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import "./register.css";
 import { useState, useEffect } from "react";
-import { useStoreState, useStoreActions } from "easy-peasy";
 import Joi from "joi";
 
 const Register = ({onRegister, validate, validateProperty}) => {

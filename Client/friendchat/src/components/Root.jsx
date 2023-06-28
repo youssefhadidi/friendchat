@@ -1,6 +1,6 @@
-import Container from 'react-bootstrap/Container';
+import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import Socket from "../services/socket";
 import UserService from "../services/userServices";
 import MessageService from "../services/messageServices";
@@ -15,19 +15,20 @@ const Root = ({ children: Component }) => {
     Socket.addHandler(MessageService);
 
     const authToken = sessionStorage.getItem("authToken");
-    if (authToken) Socket.connectSocket(authToken);
+    if (authToken) Socket.pollSocket(authToken);
     else return;
 
-    Socket.getStatus(setSocketConnected);
+    Socket.isConnected(setSocketConnected);
   }, []);
-    
-    if(!socketConnected && sessionStorage.getItem("authToken")) return <div>Loading...</div>
 
-    return (
-      <Container fluid>
-        <Row>{Component}</Row>
-      </Container>
-    );
-}
- 
+  if (!socketConnected && sessionStorage.getItem("authToken"))
+    return <div>Loading...</div>;
+
+  return (
+    <Container fluid>
+      <Row>{Component}</Row>
+    </Container>
+  );
+};
+
 export default Root;

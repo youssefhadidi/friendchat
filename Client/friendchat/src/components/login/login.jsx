@@ -49,8 +49,8 @@ const Login = ({ validate, validateProperty, onLogin, user, registerToken }) => 
 
 
   if (user) return (
-    <div className="login ">
-      <h2>Hello, {user.username}!</h2>
+    <div className="login dialog-box">
+      <h2>Hello, {user.username} !</h2>
       <Button variant="primary" type="submit" onClick={() => onLogin(user)}>
         Join Chat
       </Button>

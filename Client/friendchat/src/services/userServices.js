@@ -3,15 +3,6 @@ import http from "./httpServices";
 
 const apiEndpoint = "http://localhost:4000/api";
 
-/*let socket;
-const handleGetSocket = () => {
-    socket = Socket.getSocket();
-}
-
-Socket.addHandler(handleGetSocket);
-
-console.log("socket ", socket);*/
-
 class UserService {
   static ioSocket = Socket;
   static socket;
@@ -34,9 +25,6 @@ class UserService {
   };
 
   static connectUser = (user) => {
-    /*if (this.socket.connected)
-      console.log("socket connected")
-    else console.log("not connected yet")*/
     this.socket.volatile.emit("user_login", user);
   };
 
